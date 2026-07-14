@@ -14,7 +14,6 @@ import {
   type Article,
   type Moment,
 } from '@/components/sections'
-import { Database, Bot, Plug } from 'lucide-react'
 
 const GITHUB_URL = 'https://github.com/edwardyun12'
 const LINKEDIN_URL = 'https://uk.linkedin.com/in/chanyeongyun'
@@ -56,29 +55,7 @@ const portfolioData: PortfolioPageProps = {
       },
     },
   },
-  projects: [
-    {
-      title: 'RAG Systems',
-      description:
-        'End-to-end retrieval-augmented generation: ingestion pipelines, hybrid search, reranking, and grounded answers with citations — tuned with retrieval evaluation, not guesswork.',
-      tags: ['Python', 'AWS Bedrock', 'Vector Search'],
-      imageContent: <Database className="w-10 h-10 text-white/40" />,
-    },
-    {
-      title: 'AI Agents',
-      description:
-        'Agentic workflows that plan, call tools, and recover from failure — reliable multi-step execution with guardrails, structured outputs, and human-in-the-loop approval.',
-      tags: ['Orchestration', 'Tool Use', 'Guardrails'],
-      imageContent: <Bot className="w-10 h-10 text-white/40" />,
-    },
-    {
-      title: 'MCP Servers',
-      description:
-        'Model Context Protocol servers exposing enterprise APIs, databases, and documents to LLMs through typed, permission-aware tool interfaces.',
-      tags: ['MCP', 'TypeScript', 'REST APIs'],
-      imageContent: <Plug className="w-10 h-10 text-white/40" />,
-    },
-  ],
+  projects: [],
   stats: [
     { value: '2+', label: 'Years in Industry' },
     { value: '3', label: 'GenAI Domains — RAG · Agents · MCP' },

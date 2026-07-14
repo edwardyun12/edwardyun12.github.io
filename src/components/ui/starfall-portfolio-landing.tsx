@@ -315,21 +315,25 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                     <button onClick={ctaButtons.secondary.onClick} className="glass-button min-w-[160px] inter-font text-sm font-medium text-foreground rounded-lg px-6 py-3">{ctaButtons.secondary.label}</button>
                 </div>
                 <div className="divider mb-16" />
-                <div id="projects" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
-                    {projects.map((project, index) => (
-                        <div key={index} className="glass-card rounded-2xl p-6 text-left">
-                            <div className="project-image rounded-xl h-32 mb-4 flex items-center justify-center">{project.imageContent}</div>
-                            <h3 className="text-lg font-medium text-card-foreground mb-2 geist-font">{project.title}</h3>
-                            <p className="text-muted-foreground text-sm inter-font mb-4">{project.description}</p>
-                            <div className="flex flex-wrap gap-2">
-                                {project.tags.map(tag => (
-                                    <span key={tag} className="skill-badge px-2 py-1 rounded text-xs text-muted-foreground">{tag}</span>
-                                ))}
-                            </div>
+                {projects.length > 0 && (
+                    <>
+                        <div id="projects" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
+                            {projects.map((project, index) => (
+                                <div key={index} className="glass-card rounded-2xl p-6 text-left">
+                                    <div className="project-image rounded-xl h-32 mb-4 flex items-center justify-center">{project.imageContent}</div>
+                                    <h3 className="text-lg font-medium text-card-foreground mb-2 geist-font">{project.title}</h3>
+                                    <p className="text-muted-foreground text-sm inter-font mb-4">{project.description}</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {project.tags.map(tag => (
+                                            <span key={tag} className="skill-badge px-2 py-1 rounded text-xs text-muted-foreground">{tag}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-                <div className="divider mb-16" />
+                        <div className="divider mb-16" />
+                    </>
+                )}
                 <div id="skills" className="flex flex-col sm:flex-row justify-center items-center gap-8 text-center">
                     {stats.map((stat, index) => (
                         <React.Fragment key={stat.label}>
