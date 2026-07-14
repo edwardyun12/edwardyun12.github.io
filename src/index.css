@@ -39,16 +39,24 @@ body {
 }
 
 /* ============ ambient glow background for the sections below the hero ============ */
-/* fixed-attachment glows stay pinned to the viewport, so the ambience follows
-   the visitor down the whole page instead of living at one scroll position */
+/* The glow lives on a position:fixed pseudo-element so it stays pinned to the
+   viewport while scrolling. Unlike background-attachment:fixed (which forces a
+   full repaint of the background every scroll frame and causes jank), a fixed
+   element gets its own compositor layer and costs nothing during scroll. */
 .sections-bg {
   position: relative;
+}
+.sections-bg::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background:
     radial-gradient(1100px 750px at 12% 8%, rgba(125, 140, 250, 0.17), transparent 60%),
     radial-gradient(900px 650px at 85% 15%, rgba(103, 183, 247, 0.10), transparent 60%),
     radial-gradient(1000px 700px at 82% 95%, rgba(155, 123, 255, 0.14), transparent 60%),
     var(--background);
-  background-attachment: fixed, fixed, fixed, scroll;
 }
 /* fade the glow in from the hero's flat black so there is no visible seam */
 .sections-bg::before {

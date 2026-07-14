@@ -188,28 +188,32 @@ const articles: Article[] = [
 // 게시물 주소는 LinkedIn에서 게시물 우측 상단 ⋯ 메뉴 → "Copy link to post"로 복사할 수 있어요.
 const moments: Moment[] = [
   {
-    src: '/photos/bespin.png',
-    alt: 'Chanyeong at the Bespin Global office',
-    caption: 'First day at Bespin Global',
-    sub: 'Seoul · 2025',
-  },
-  {
-    src: '/photos/aws.png',
+    src: '/photos/aws.webp',
     alt: 'Chanyeong at the AWS office',
-    caption: 'Visiting the AWS office',
-    sub: 'Seoul · 2025',
+    caption: 'Invited to AWS Student Community Day 2026 in Seoul',
+    sub: 'Seoul, South Korea · 2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7479152619706544129/',
   },
   {
-    src: '/photos/vitality-awards.jpeg',
+    src: '/photos/bespin.webp',
+    alt: 'Chanyeong at the Bespin Global office',
+    caption: 'First day at Bespin Global as a GenAI Software Engineer',
+    sub: 'Seoul, South Korea · 2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7467213468073463808/',
+  },
+  {
+    src: '/photos/vitality-awards.webp',
     alt: 'Tech Tribe Awards with the Vitality team',
     caption: 'Tech Tribe Awards with the Vitality team',
     sub: 'UK · 2024',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7219637696611106816/',
   },
   {
-    src: '/photos/bu-team.jpeg',
-    alt: 'Project showcase with the Bournemouth University team',
-    caption: 'Project showcase with my BU team',
-    sub: 'Bournemouth · 2024',
+    src: '/photos/bu-team.webp',
+    alt: 'Chanyeong and his Bournemouth University team presenting their project to J.P. Morgan',
+    caption: 'Presenting our team project to J.P. Morgan',
+    sub: 'Bournemouth · 2022',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:6935899938622988288/',
   },
 ]
 
