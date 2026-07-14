@@ -10,6 +10,7 @@ export interface PortfolioPageProps {
   logo?: { initials: React.ReactNode; name: React.ReactNode; };
   navLinks?: NavLink[];
   resume?: { label: string; onClick?: () => void; };
+  avatar?: { src: string; alt: string; };
   hero?: { titleLine1: React.ReactNode; titleLine2Gradient: React.ReactNode; subtitle: React.ReactNode; };
   ctaButtons?: { primary: { label: string; onClick?: () => void; }; secondary: { label: string; onClick?: () => void; }; };
   projects?: Project[];
@@ -259,7 +260,7 @@ const BackgroundLayer: React.FC = () => {
 };
 
 // --- DEFAULT DATA ---
-const defaultData: Required<Omit<PortfolioPageProps, 'showAnimatedBackground'>> = {
+const defaultData: Required<Omit<PortfolioPageProps, 'showAnimatedBackground' | 'avatar'>> = {
   logo: { initials: 'MT', name: 'Meng To' },
   navLinks: [ { label: 'About', href: '#about' }, { label: 'Projects', href: '#projects' }, { label: 'Skills', href: '#skills' } ],
   resume: { label: 'Resume' },
@@ -274,6 +275,7 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
   logo = defaultData.logo,
   navLinks = defaultData.navLinks,
   resume = defaultData.resume,
+  avatar,
   hero = defaultData.hero,
   ctaButtons = defaultData.ctaButtons,
   projects = defaultData.projects,
@@ -304,6 +306,17 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
         <main id="about" className="w-full min-h-screen flex flex-col items-center justify-center px-6 py-20">
             <div className="max-w-6xl mx-auto text-center">
                 <div className="mb-8 float-animation">
+                    {avatar && (
+                        <div className="flex justify-center mb-8">
+                            <div className="p-[3px] rounded-full bg-gradient-to-br from-[#67b7f7] via-[#7d8cfa] to-[#9b7bff] shadow-[0_8px_40px_rgba(125,140,250,0.35)]">
+                                <img
+                                    src={avatar.src}
+                                    alt={avatar.alt}
+                                    className="w-28 h-28 md:w-32 md:h-32 rounded-full object-cover border-[3px] border-[#050609]"
+                                />
+                            </div>
+                        </div>
+                    )}
                     <h1 className="md:text-6xl lg:text-7xl leading-[1.1] geist-font text-5xl font-light text-foreground tracking-tight mb-4">
                         {hero.titleLine1}
                         <span className="gradient-text block tracking-tight">{hero.titleLine2Gradient}</span>

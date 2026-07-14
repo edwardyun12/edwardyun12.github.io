@@ -35,6 +35,10 @@ const portfolioData: PortfolioPageProps = {
     label: 'Download CV',
     onClick: () => window.open('/cv.pdf', '_blank'),
   },
+  avatar: {
+    src: '/photos/profile.webp',
+    alt: 'Chanyeong Yun',
+  },
   hero: {
     titleLine1: 'Building the agentic layer:',
     titleLine2Gradient: 'AI agents · MCP · RAG',
@@ -138,10 +142,19 @@ const skillGroups: SkillGroup[] = [
   { title: 'Platform & Delivery', items: ['AWS', 'Docker', 'CI/CD', 'Git', 'REST APIs', 'Agile delivery'] },
 ]
 
-// TODO: 실제 자격증으로 교체하세요 — url이 있으면 카드가 클릭 가능해집니다.
 const certs: Cert[] = [
-  { name: 'Certification Name', issuer: 'Issuing Organisation', year: '20XX', url: 'https://example.com/credential' },
-  { name: 'Certification Name', issuer: 'Issuing Organisation', year: '20XX' },
+  {
+    name: 'AWS Certified AI Practitioner',
+    issuer: 'Amazon Web Services',
+    year: '2026',
+    url: 'https://www.credly.com/badges/153342e4-1f15-4317-adcc-77a7b7e2af8e',
+  },
+  {
+    name: 'IBM MQ Developer Essentials',
+    issuer: 'IBM',
+    year: '2022',
+    url: 'https://www.credly.com/badges/34675a7d-17a1-4473-9469-162a5b38c3a7',
+  },
 ]
 
 // TODO: 실제 글로 교체하세요 — LinkedIn 아티클, 블로그, Medium 등 링크.
