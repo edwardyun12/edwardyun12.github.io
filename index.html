@@ -289,9 +289,9 @@ h2 {
   border-radius: 10px; padding: 14px 17px; margin-bottom: 14px;
   overflow-x: auto; white-space: pre; color: var(--muted);
 }
-.toolres .k { color: var(--acc); }
-.toolres .s { color: var(--ok); }
-.toolres .c { color: var(--faint); }
+.toolres k { color: var(--acc); font-style: normal; }
+.toolres v { color: var(--ok); font-style: normal; }
+.toolres c { color: var(--faint); font-style: normal; }
 
 .answer { font-size: 15px; color: var(--text); line-height: 1.75; }
 .answer strong { color: #fff; font-weight: 600; }
@@ -861,11 +861,11 @@ footer { padding: 130px 0 60px; position: relative; z-index: 1; }
       think: ['intent: biography — confidence 0.98', 'plan: profile.get → summarise, keep the ego in check'],
       tool: { fn: 'profile.get', args: '{}', res: [
         '{',
-        '  <k>"name"</k>:   <s>"Chanyeong (Edward) Yun"</s>,',
-        '  <k>"role"</k>:   <s>"GenAI Software Engineer @ Bespin Global"</s>,',
-        '  <k>"prev"</k>:   <s>"Software Engineer @ Vitality (UK)"</s>,',
-        '  <k>"degree"</k>: <s>"BSc Software Engineering — Bournemouth, final year"</s>,',
-        '  <k>"focus"</k>:  [<s>"RAG"</s>, <s>"AI agents"</s>, <s>"MCP servers"</s>]',
+        '  <k>"name"</k>:   <v>"Chanyeong (Edward) Yun"</v>,',
+        '  <k>"role"</k>:   <v>"GenAI Software Engineer @ Bespin Global"</v>,',
+        '  <k>"prev"</k>:   <v>"Software Engineer @ Vitality (UK)"</v>,',
+        '  <k>"degree"</k>: <v>"BSc Software Engineering — Bournemouth, final year"</v>,',
+        '  <k>"focus"</k>:  [<v>"RAG"</v>, <v>"AI agents"</v>, <v>"MCP servers"</v>]',
         '}'
       ]},
       answer: 'Chanyeong (Edward) Yun is a **GenAI Software Engineer at Bespin Global**, building the layer where LLMs meet real enterprise systems — RAG pipelines, MCP servers, and the eval harnesses that keep them honest. Before that: a placement year shipping production data pipelines at **Vitality**, one of the UK’s largest health insurers. He’s also finishing a **BSc in Software Engineering at Bournemouth University** — building agents by day, writing a dissertation by night.'
@@ -876,10 +876,10 @@ footer { padding: 130px 0 60px; position: relative; z-index: 1; }
       tool: { fn: 'experience.list', args: '{ order: "desc" }', res: [
         '<c>// 2 records · 0.3s</c>',
         '[',
-        '  { <k>company</k>: <s>"Bespin Global"</s>, <k>period</k>: <s>"2025 → now"</s>,',
-        '    <k>focus</k>: <s>"RAG · agents · MCP servers"</s> },',
-        '  { <k>company</k>: <s>"Vitality (UK)"</s>, <k>period</k>: <s>"2024 → 2025"</s>,',
-        '    <k>focus</k>: <s>"data pipelines for millions of members"</s> }',
+        '  { <k>company</k>: <v>"Bespin Global"</v>, <k>period</k>: <v>"2025 → now"</v>,',
+        '    <k>focus</k>: <v>"RAG · agents · MCP servers"</v> },',
+        '  { <k>company</k>: <v>"Vitality (UK)"</v>, <k>period</k>: <v>"2024 → 2025"</v>,',
+        '    <k>focus</k>: <v>"data pipelines for millions of members"</v> }',
         ']'
       ]},
       answer: 'Two production chapters so far. At **Bespin Global** (2025 → now) he designs RAG pipelines end-to-end — ingestion, hybrid retrieval, reranking, grounded generation — and builds MCP servers that give agents safe, typed access to enterprise systems, with faithfulness checks wired into CI. Before that, at **Vitality UK** (2024 → 2025) he built the data pipelines feeding analytics for millions of members, in a regulated industry where deploys can’t afford drama. Full traces below ↓'
@@ -889,9 +889,9 @@ footer { padding: 130px 0 60px; position: relative; z-index: 1; }
       think: ['intent: project search', 'embedding query → cosine over 3 deployments', 'top match score: 0.97'],
       tool: { fn: 'projects.search', args: '{ q: "rag / mcp" }', res: [
         '<c>// 3 matches</c>',
-        '[ <s>"Enterprise RAG platform"</s>      <c>score 0.97</c>,',
-        '  <s>"AI agent MCP server"</s>          <c>score 0.95</c>,',
-        '  <s>"chanyeong.agent (this page)"</s>  <c>score 0.88</c> ]'
+        '[ <v>"Enterprise RAG platform"</v>      <c>score 0.97</c>,',
+        '  <v>"AI agent MCP server"</v>          <c>score 0.95</c>,',
+        '  <v>"chanyeong.agent (this page)"</v>  <c>score 0.88</c> ]'
       ]},
       answer: 'Three that matter. An **enterprise RAG platform** — hybrid BM25 + embedding retrieval, cross-encoder reranking, and an eval harness that scores faithfulness before anything reaches a user. An **MCP server for AI agents** — enterprise data and actions exposed as typed tools, with auth and audit built in rather than bolted on. And the meta one: **this page**, a live agent runtime hand-written in one file with zero frameworks. Details in deployments ↓'
     },
@@ -910,10 +910,10 @@ footer { padding: 130px 0 60px; position: relative; z-index: 1; }
       keys: /contact|email|hire|hiring|available|reach|talk|linkedin|github|open to|why should|연락|채용/i,
       think: ['intent: contact / availability — high priority', 'plan: contact.open → include response-time SLA'],
       tool: { fn: 'contact.open', args: '{}', res: [
-        '<k>email</k>:    <s>"edward767976@gmail.com"</s>',
-        '<k>linkedin</k>: <s>"linkedin.com/in/chanyeongyun"</s>',
-        '<k>github</k>:   <s>"github.com/edwardyun12"</s>',
-        '<k>sla</k>:      <s>"replies within a day"</s>'
+        '<k>email</k>:    <v>"edward767976@gmail.com"</v>',
+        '<k>linkedin</k>: <v>"linkedin.com/in/chanyeongyun"</v>',
+        '<k>github</k>:   <v>"github.com/edwardyun12"</v>',
+        '<k>sla</k>:      <v>"replies within a day"</v>'
       ]},
       answer: 'He replies fast. Email **edward767976@gmail.com**, or find him on **LinkedIn** (chanyeongyun) and **GitHub** (edwardyun12). If you’re building something with agents, retrieval or MCP — that’s exactly the conversation he wants to have. And yes: rare combination of already-shipping GenAI production systems while still technically a student. Hire accordingly.'
     }
@@ -921,8 +921,8 @@ footer { padding: 130px 0 60px; position: relative; z-index: 1; }
   var FALLBACK = {
     think: ['no tool matches this query', 'confidence below threshold → falling back to human.handoff()'],
     tool: { fn: 'human.handoff', args: '{ reason: "out of scope" }', res: [
-      '<k>status</k>: <s>"escalated"</s>',
-      '<k>human</k>:  <s>"edward767976@gmail.com"</s>'
+      '<k>status</k>: <v>"escalated"</v>',
+      '<k>human</k>:  <v>"edward767976@gmail.com"</v>'
     ]},
     answer: 'That one’s outside my tool registry — I’m a portfolio agent with six tools and strong opinions, not a general intelligence. For anything deeper, the human behind me is one email away: **edward767976@gmail.com**. Meanwhile, the suggested prompts below are all within scope.'
   };
