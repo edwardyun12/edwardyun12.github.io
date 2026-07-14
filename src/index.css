@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+/* ============ shadcn-style design tokens (dark, single-theme) ============ */
+:root {
+  --background: #050609;
+  --foreground: #f3f4f8;
+  --card: #0b0d13;
+  --card-foreground: #f3f4f8;
+  --muted-foreground: #9aa3b2;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.16);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #7d8cfa;
+  color: #050609;
+}
+
+/* ============ ambient glow background for the sections below the hero ============ */
+/* fixed-attachment glows stay pinned to the viewport, so the ambience follows
+   the visitor down the whole page instead of living at one scroll position */
+.sections-bg {
+  position: relative;
+  background:
+    radial-gradient(1100px 750px at 12% 8%, rgba(125, 140, 250, 0.17), transparent 60%),
+    radial-gradient(900px 650px at 85% 15%, rgba(103, 183, 247, 0.10), transparent 60%),
+    radial-gradient(1000px 700px at 82% 95%, rgba(155, 123, 255, 0.14), transparent 60%),
+    var(--background);
+  background-attachment: fixed, fixed, fixed, scroll;
+}
+/* fade the glow in from the hero's flat black so there is no visible seam */
+.sections-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(280px, 45vh, 480px);
+  background: linear-gradient(to bottom, var(--background) 0%, rgba(5, 6, 9, 0.6) 45%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ============ font utilities used by the component ============ */
+.geist-font {
+  font-family: "Geist", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+}
+.inter-font {
+  font-family: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+}
+
+/* ============ glassmorphism pieces used by the component ============ */
+.divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+}
+
+/* NOTE: no backdrop-filter here on purpose — the animated canvas behind
+   forces a re-blur of every glass element each frame, which tanks FPS. */
+.glass-button {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.11);
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: translateY(-1px);
+}
+
+.primary-button {
+  background: linear-gradient(135deg, rgba(103, 183, 247, 0.28), rgba(155, 123, 255, 0.28));
+  border: 1px solid rgba(125, 140, 250, 0.5);
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+.primary-button:hover {
+  background: linear-gradient(135deg, rgba(103, 183, 247, 0.42), rgba(155, 123, 255, 0.42));
+  box-shadow: 0 8px 32px rgba(125, 140, 250, 0.28);
+  transform: translateY(-1px);
+}
+
+.glass-card {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)), rgba(9, 11, 18, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.glass-card:hover {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)), rgba(9, 11, 18, 0.45);
+  border-color: rgba(125, 140, 250, 0.38);
+  box-shadow: 0 12px 44px rgba(125, 140, 250, 0.14);
+  transform: translateY(-4px);
+}
+
+.gradient-text {
+  background: linear-gradient(92deg, #67b7f7 0%, #7d8cfa 55%, #9b7bff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.project-image {
+  background: linear-gradient(135deg, rgba(103, 183, 247, 0.1), rgba(155, 123, 255, 0.08));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.skill-badge {
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 9999px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.skill-badge:hover {
+  background: rgba(125, 140, 250, 0.12);
+  border-color: rgba(125, 140, 250, 0.35);
+}
+
+/* ============ float animation (from component spec) ============ */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .float-animation {
+    animation: none;
+  }
+  .glass-button,
+  .primary-button,
+  .glass-card {
+    transition: none;
+  }
+}
