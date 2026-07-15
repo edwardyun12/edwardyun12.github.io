@@ -1,5 +1,5 @@
 import React from 'react'
-import { ExternalLink, Mail, Award, ArrowUpRight } from 'lucide-react'
+import { ExternalLink, Mail, Award, ArrowUpRight, Link2 } from 'lucide-react'
 
 // lucide-react no longer ships brand icons — inline SVGs instead
 const Github: React.FC<{ className?: string }> = ({ className }) => (
@@ -37,6 +37,8 @@ export interface Cert {
   issuer: string
   year: string
   url?: string
+  /** 발급처 공식 뱃지 이미지 경로 — 없으면 기본 Award 아이콘 표시 */
+  image?: string
 }
 export interface Article {
   title: string
@@ -49,8 +51,10 @@ export interface Moment {
   alt: string
   caption: string
   sub: string
-  /** LinkedIn 게시물 등 링크 — 있으면 카드가 클릭 가능해지고 LinkedIn 아이콘이 표시됩니다 */
+  /** LinkedIn 게시물, 블로그 등 링크 — 있으면 카드가 클릭 가능해지고 배지 아이콘이 표시됩니다 */
   url?: string
+  /** 링크 배지에 표시할 아이콘. 기본값은 'linkedin' */
+  urlIcon?: 'linkedin' | 'link'
 }
 export interface FooterData {
   name: string
@@ -223,9 +227,13 @@ export const CertsSection: React.FC<{ certs: Cert[] }> = ({ certs }) => (
       {certs.map((c) => {
         const inner = (
           <>
-            <div className="w-10 h-10 rounded-lg project-image flex items-center justify-center shrink-0">
-              <Award className="w-5 h-5 text-white/50" />
-            </div>
+            {c.image ? (
+              <img src={c.image} alt={`${c.name} badge`} loading="lazy" className="w-12 h-12 object-contain shrink-0" />
+            ) : (
+              <div className="w-10 h-10 rounded-lg project-image flex items-center justify-center shrink-0">
+                <Award className="w-5 h-5 text-white/50" />
+              </div>
+            )}
             <div className="text-left">
               <div className="geist-font text-sm font-medium text-card-foreground">{c.name}</div>
               <div className="inter-font text-xs text-muted-foreground">
@@ -298,7 +306,11 @@ export const MomentsSection: React.FC<{ moments: Moment[] }> = ({ moments }) => 
               />
               {m.url && (
                 <span className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/55 border border-white/20 flex items-center justify-center">
-                  <Linkedin className="w-3.5 h-3.5 text-white/85" />
+                  {m.urlIcon === 'link' ? (
+                    <Link2 className="w-3.5 h-3.5 text-white/85" />
+                  ) : (
+                    <Linkedin className="w-3.5 h-3.5 text-white/85" />
+                  )}
                 </span>
               )}
             </div>
