@@ -27,6 +27,12 @@ export interface FeaturedProject {
   tags: string[]
   repoUrl?: string
   demoUrl?: string
+  /** 소속·기간 표시 (예: 'Bespin Global · 2026') */
+  meta?: string
+  /** 상세 불릿 — 있으면 카드에 리스트로 표시됩니다 */
+  highlights?: string[]
+  /** true면 그리드 전체 폭을 차지하는 대표 카드로 렌더링 */
+  featured?: boolean
 }
 export interface SkillGroup {
   title: string
@@ -160,40 +166,59 @@ export const ExperienceSection: React.FC<{ items: ExperienceItem[]; education?: 
 // --- FEATURED PROJECTS ---
 export const FeaturedProjectsSection: React.FC<{ projects: FeaturedProject[] }> = ({ projects }) => (
   <Section id="featured" eyebrow="Projects" title={<>Things I&apos;ve <span className="gradient-text">built</span></>}>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {projects.map((p) => (
-        <div key={p.title} className="glass-card rounded-2xl p-6 text-left flex flex-col">
-          <h3 className="geist-font text-lg font-medium text-card-foreground mb-2">{p.title}</h3>
-          <p className="inter-font text-sm text-muted-foreground leading-relaxed mb-4 flex-1">{p.description}</p>
-          <div className="flex flex-wrap gap-2 mb-5">
+        <div
+          key={p.title}
+          className={`glass-card rounded-2xl text-left flex flex-col ${
+            p.featured ? 'lg:col-span-2 p-8 md:p-10' : 'p-6 md:p-8'
+          }`}
+        >
+          <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1 mb-3">
+            <h3 className={`geist-font font-medium text-card-foreground ${p.featured ? 'text-xl md:text-2xl' : 'text-lg'}`}>
+              {p.title}
+            </h3>
+            {p.meta && <span className="inter-font text-sm text-muted-foreground tabular-nums shrink-0">{p.meta}</span>}
+          </div>
+          <p className="inter-font text-sm md:text-base text-muted-foreground leading-relaxed mb-4">{p.description}</p>
+          {p.highlights && p.highlights.length > 0 && (
+            <ul className="inter-font text-sm text-muted-foreground leading-relaxed list-disc pl-5 space-y-2 mb-5">
+              {p.highlights.map((h) => (
+                <li key={h}>{h}</li>
+              ))}
+            </ul>
+          )}
+          <div className="flex flex-wrap gap-2 mb-5 mt-auto">
             {p.tags.map((tag) => (
               <span key={tag} className="skill-badge px-2 py-1 rounded text-xs text-muted-foreground">
                 {tag}
               </span>
             ))}
           </div>
-          <div className="flex gap-3">
-            {p.repoUrl && (
-              <a
-                href={p.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass-button inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-foreground inter-font"
-              >
-                <Github className="w-3.5 h-3.5" /> Code
-              </a>
-            )}
-            {p.demoUrl && (
-              <a
-                href={p.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass-button inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-foreground inter-font"
-              >
-                <ExternalLink className="w-3.5 h-3.5" /> Live
-              </a>
-            )}
-          </div>
+          {(p.repoUrl || p.demoUrl) && (
+            <div className="flex gap-3">
+              {p.repoUrl && (
+                <a
+                  href={p.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-button inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-foreground inter-font"
+                >
+                  <Github className="w-3.5 h-3.5" /> Code
+                </a>
+              )}
+              {p.demoUrl && (
+                <a
+                  href={p.demoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-button inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-foreground inter-font"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" /> Live
+                </a>
+              )}
+            </div>
+          )}
         </div>
       ))}
     </div>
@@ -340,8 +365,8 @@ export const SiteFooter: React.FC<{ data: FooterData }> = ({ data }) => (
         Let&apos;s build something that <span className="gradient-text">actually ships</span>.
       </h2>
       <p className="inter-font text-sm text-muted-foreground mb-8 max-w-xl mx-auto">
-        Graduating in 2026 and open to graduate software engineering and GenAI roles — the fastest way to reach me is
-        email.
+        Graduating in June 2027 and open to graduate software engineering and GenAI roles — the fastest way to reach me
+        is email.
       </p>
       <div className="flex justify-center gap-3 mb-10">
         <a

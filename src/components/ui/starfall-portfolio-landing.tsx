@@ -327,7 +327,7 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                     <button onClick={ctaButtons.primary.onClick} className="primary-button px-6 py-3 text-foreground rounded-lg font-medium text-sm min-w-[160px]">{ctaButtons.primary.label}</button>
                     <button onClick={ctaButtons.secondary.onClick} className="glass-button min-w-[160px] inter-font text-sm font-medium text-foreground rounded-lg px-6 py-3">{ctaButtons.secondary.label}</button>
                 </div>
-                <div className="divider mb-16" />
+                {(projects.length > 0 || stats.length > 0) && <div className="divider mb-16" />}
                 {projects.length > 0 && (
                     <>
                         <div id="projects" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
@@ -347,17 +347,19 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                         <div className="divider mb-16" />
                     </>
                 )}
-                <div id="skills" className="flex flex-col sm:flex-row justify-center items-center gap-8 text-center">
-                    {stats.map((stat, index) => (
-                        <React.Fragment key={stat.label}>
-                            <div>
-                                <div className="text-3xl md:text-4xl font-light text-foreground mb-1 geist-font tracking-tight">{stat.value}</div>
-                                <div className="text-muted-foreground text-sm inter-font font-normal">{stat.label}</div>
-                            </div>
-                            {index < stats.length - 1 && <div className="hidden sm:block w-px h-12 bg-gradient-to-b from-transparent via-input to-transparent" />}
-                        </React.Fragment>
-                    ))}
-                </div>
+                {stats.length > 0 && (
+                    <div id="skills" className="flex flex-col sm:flex-row justify-center items-center gap-8 text-center">
+                        {stats.map((stat, index) => (
+                            <React.Fragment key={stat.label}>
+                                <div>
+                                    <div className="text-3xl md:text-4xl font-light text-foreground mb-1 geist-font tracking-tight">{stat.value}</div>
+                                    <div className="text-muted-foreground text-sm inter-font font-normal">{stat.label}</div>
+                                </div>
+                                {index < stats.length - 1 && <div className="hidden sm:block w-px h-12 bg-gradient-to-b from-transparent via-input to-transparent" />}
+                            </React.Fragment>
+                        ))}
+                    </div>
+                )}
             </div>
         </main>
       </div>

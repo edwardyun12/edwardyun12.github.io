@@ -25,8 +25,8 @@ const portfolioData: PortfolioPageProps = {
     name: 'Chanyeong Yun',
   },
   navLinks: [
-    { label: 'Experience', href: '#experience' },
     { label: 'Projects', href: '#featured' },
+    { label: 'Experience', href: '#experience' },
     { label: 'Skills', href: '#stack' },
     { label: 'Writing', href: '#writing' },
     { label: 'GitHub', href: GITHUB_URL },
@@ -43,7 +43,7 @@ const portfolioData: PortfolioPageProps = {
     titleLine1: 'Building the agentic layer:',
     titleLine2Gradient: 'AI agents · MCP · RAG',
     subtitle:
-      'Chanyeong Yun — GenAI Software Engineer at Bespin Global and final-year Software Engineering student at Bournemouth University, shipping production GenAI systems on AWS Bedrock. Previously at Vitality.',
+      'Chanyeong Yun — GenAI Software Engineer at Bespin Global and final-year Software Engineering student at Bournemouth University (graduating June 2027), shipping production GenAI systems on AWS Bedrock. Previously at Vitality.',
   },
   ctaButtons: {
     primary: {
@@ -60,11 +60,7 @@ const portfolioData: PortfolioPageProps = {
     },
   },
   projects: [],
-  stats: [
-    { value: '2+', label: 'Years in Industry' },
-    { value: '3', label: 'GenAI Domains — RAG · Agents · MCP' },
-    { value: '2026', label: 'BSc Software Engineering, Bournemouth' },
-  ],
+  stats: [],
   showAnimatedBackground: true,
 }
 
@@ -98,7 +94,7 @@ const education: ExperienceItem[] = [
   {
     role: 'BSc (Hons) Software Engineering',
     org: 'Bournemouth University',
-    period: '2021.09 — 2027 (expected)',
+    period: '2021.09 — 2027.06 (expected graduation)',
     bullets: [
       'Sandwich-degree programme combining academic study with a year in industry.',
       'Coursework spanning software design, distributed systems, databases, and applied machine learning.',
@@ -107,15 +103,21 @@ const education: ExperienceItem[] = [
   },
 ]
 
-// TODO: 실제 프로젝트로 교체하세요 — repoUrl/demoUrl은 없으면 지우면 버튼이 안 보입니다.
+// 실무 프로젝트는 repoUrl/demoUrl 없이 설명·하이라이트로만 — 버튼은 자동으로 숨겨집니다.
 const featuredProjects: FeaturedProject[] = [
   {
-    title: 'Project Title One',
+    title: 'Insurance Document RAG — 96% accuracy on an SLM',
+    meta: 'Bespin Global · 2026',
     description:
-      'One or two sentences: the problem this solves, what you built, and the measurable outcome (e.g. "cut retrieval latency from 2s to 300ms").',
-    tags: ['Tech A', 'Tech B', 'Tech C'],
-    repoUrl: `${GITHUB_URL}/repo-name`,
-    demoUrl: 'https://example.com',
+      'Production vector-RAG system over a global insurance provider’s policy documents, shipped end-to-end as a FastAPI service with a React front end. Engineered the pipeline so an SLM (Qwen) holds 96% answer accuracy on the golden test set — within 2 points of the 98% Claude Sonnet baseline, while cutting a four-figure daily inference bill to a fraction.',
+    highlights: [
+      'Multi-engine document parsing (PyMuPDF4LLM, Docling, PaddleOCR), with Claude on AWS Bedrock converting tables, images, and flowcharts into LLM-readable text.',
+      'Hybrid chunking that preserves both token budgets and table structure, combined with LangChain’s RecursiveCharacterTextSplitter for plain prose.',
+      'Titan Embeddings v2 into Weaviate and ChromaDB with hybrid retrieval (BM25 + vector) — BM25 tuned at the tokeniser level (Kagome KR, trigram) for Korean policy terms, then sharpened with LLM-based reranking.',
+      'Prompt-engineered generation that grounds Qwen’s answers in retrieved chunks, evaluated continuously with golden-set accuracy and RAGAS metrics.',
+    ],
+    tags: ['Python', 'FastAPI', 'React', 'AWS Bedrock', 'LangChain', 'Weaviate', 'ChromaDB', 'RAGAS'],
+    featured: true,
   },
   {
     title: 'Project Title Two',
@@ -134,10 +136,23 @@ const featuredProjects: FeaturedProject[] = [
 ]
 
 const skillGroups: SkillGroup[] = [
-  { title: 'Languages', items: ['Python', 'TypeScript', 'JavaScript', 'Java', 'SQL'] },
+  {
+    title: 'Languages & Frameworks',
+    items: ['Python', 'TypeScript', 'JavaScript', 'Java', 'SQL', 'FastAPI', 'React'],
+  },
   {
     title: 'GenAI / LLM',
-    items: ['RAG pipelines', 'AI agent orchestration', 'MCP servers', 'AWS Bedrock', 'Vector databases', 'LLM evaluation'],
+    items: [
+      'RAG pipelines',
+      'LangChain',
+      'AWS Bedrock',
+      'Vector DBs — Weaviate · ChromaDB',
+      'Hybrid retrieval & reranking',
+      'Document parsing & OCR',
+      'LLM evaluation — RAGAS · golden sets',
+      'AI agent orchestration',
+      'MCP servers',
+    ],
   },
   { title: 'Platform & Delivery', items: ['AWS', 'Docker', 'CI/CD', 'Git', 'REST APIs', 'Agile delivery'] },
 ]
@@ -236,8 +251,8 @@ function App() {
     <>
       <PortfolioPage {...portfolioData} />
       <div className="sections-bg">
-        <ExperienceSection items={experience} education={education} />
         <FeaturedProjectsSection projects={featuredProjects} />
+        <ExperienceSection items={experience} education={education} />
         <SkillsSection groups={skillGroups} />
         <CertsSection certs={certs} />
         <WritingSection articles={articles} />
