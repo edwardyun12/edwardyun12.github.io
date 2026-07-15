@@ -78,15 +78,25 @@ const experience: ExperienceItem[] = [
     tags: ['Python', 'RAG', 'MCP', 'AI Agents', 'AWS Bedrock', 'Vector Search'],
   },
   {
+    role: 'Tactical Systems & Communications Squad Leader, Sergeant',
+    org: 'Republic of Korea Army',
+    period: '2024.09 — 2026.03',
+    bullets: [
+      'Mandatory military service — led a squad of 8+ personnel coordinating technical operations to keep tactical systems at high availability.',
+      'Managed and optimised tactical network infrastructure, proactively troubleshooting hardware and signal issues to ensure 24/7 connectivity.',
+    ],
+    tags: ['Leadership', 'Network Operations', 'Mandatory Service'],
+  },
+  {
     role: 'Associate Software Engineer',
     org: 'Vitality',
     period: '2023.07 — 2024.07',
     bullets: [
-      'Spent a full year as a developer on production systems at one of the UK’s largest health & life insurers.',
-      'Delivered features end-to-end within an agile team — from design and implementation through code review, testing, and release in a regulated environment.',
-      'Worked across the stack on customer-facing insurance products, collaborating with QA, product, and platform teams.',
+      'Developed and maintained production backend services in a GraphQL engineering team — GraphQL, NestJS, TypeScript, and Node.js — at one of the UK’s largest health & life insurers.',
+      'Built and optimised an internal testing tool with React, JavaScript, and Sitecore, significantly improving development and testing workflows.',
+      'Delivered iteratively in a Scaled Agile Framework (SAFe) environment, and proactively moved teams to broaden expertise across engineering stacks.',
     ],
-    tags: ['Full-stack', 'Agile', 'CI/CD', 'Production Systems'],
+    tags: ['GraphQL', 'NestJS', 'TypeScript', 'Node.js', 'React', 'SAFe'],
   },
 ]
 
@@ -96,10 +106,10 @@ const education: ExperienceItem[] = [
     org: 'Bournemouth University',
     period: '2021.09 — 2027.06 (expected graduation)',
     bullets: [
-      'Sandwich-degree programme combining academic study with a year in industry.',
-      'Coursework spanning software design, distributed systems, databases, and applied machine learning.',
+      'On track for First Class Honours (GPA 4.5) on a sandwich-degree programme combining academic study with a year in industry.',
+      'Elected Student Representative for 100+ Software Engineering peers — coursework spanning systems design, full-stack development, and machine learning.',
     ],
-    tags: ['Final Year', 'Year in Industry'],
+    tags: ['First Class Honours', 'Student Representative', 'Year in Industry'],
   },
 ]
 
@@ -120,25 +130,25 @@ const featuredProjects: FeaturedProject[] = [
     featured: true,
   },
   {
-    title: 'Project Title Two',
+    title: 'HireReady AI — LLM-powered CV analysis',
+    meta: 'Personal project · 2025 — Present',
     description:
-      'Focus on your role: what part did you own? Architecture, pipeline, evaluation? Recruiters skim — lead with the impact.',
-    tags: ['Tech A', 'Tech B'],
-    repoUrl: `${GITHUB_URL}/repo-name`,
+      'Full-stack platform that analyses CVs in real time and recommends skill optimisations to improve job-application success. React front end over an asynchronous FastAPI backend, with LLMs performing deep semantic analysis to surface critical skill gaps and data-driven recommendations.',
+    tags: ['React', 'FastAPI', 'Python', 'LLM'],
   },
   {
-    title: 'Project Title Three',
+    title: '1st Place — JPMorgan Computing in Business Week',
+    meta: 'Bournemouth University · 2022',
     description:
-      'Side projects count too — a small tool with clean code and a good README beats a big claim with nothing to click.',
-    tags: ['Tech A', 'Tech B'],
-    repoUrl: `${GITHUB_URL}/repo-name`,
+      'Won first place in JPMorgan Chase’s Computing in Business Week competition. Translated stakeholder requirements into technical specifications and shipped a full-stack solution — Python/Flask backend with a responsive front end — earning an invitation to a two-day workshop at JPMorgan’s Bournemouth office.',
+    tags: ['Python', 'Flask', 'Full-stack', 'Requirements Analysis'],
   },
 ]
 
 const skillGroups: SkillGroup[] = [
   {
     title: 'Languages & Frameworks',
-    items: ['Python', 'TypeScript', 'JavaScript', 'Java', 'SQL', 'FastAPI', 'React'],
+    items: ['Python', 'TypeScript', 'JavaScript', 'Java', 'Kotlin', 'SQL', 'React', 'FastAPI', 'NestJS', 'GraphQL'],
   },
   {
     title: 'GenAI / LLM',
@@ -232,7 +242,7 @@ const moments: Moment[] = [
   {
     src: '/photos/bu-team.webp',
     alt: 'Chanyeong and his Bournemouth University team presenting their project to J.P. Morgan',
-    caption: 'Presenting our team project to J.P. Morgan',
+    caption: 'Winning 1st place at JPMorgan’s Computing in Business Week',
     sub: 'Bournemouth · 2022',
     url: 'https://www.linkedin.com/feed/update/urn:li:activity:6935899938622988288/',
   },
