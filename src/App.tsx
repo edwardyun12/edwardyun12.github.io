@@ -40,10 +40,10 @@ const portfolioData: PortfolioPageProps = {
     alt: 'Chanyeong Yun',
   },
   hero: {
-    titleLine1: 'Building the agentic layer:',
-    titleLine2Gradient: 'AI agents · MCP · RAG',
+    titleLine1: 'GenAI Software Engineer,',
+    titleLine2Gradient: 'building production AI systems',
     subtitle:
-      'Chanyeong Yun — GenAI Software Engineer at Bespin Global and final-year Software Engineering student at Bournemouth University (graduating June 2027), shipping production GenAI systems on AWS Bedrock. Previously at Vitality.',
+      'Chanyeong Yun — built RAG systems and AI agent workflows on AWS Bedrock at Bespin Global, an AWS Premier Tier Partner and one of Asia’s leading cloud MSPs. Previously completed a 12-month software engineering placement at Vitality, one of the UK’s largest health & life insurers. Final-year Software Engineering student at Bournemouth University, graduating June 2027 and seeking graduate roles building AI-powered software.',
   },
   ctaButtons: {
     primary: {
@@ -55,7 +55,7 @@ const portfolioData: PortfolioPageProps = {
     secondary: {
       label: 'Contact Me',
       onClick: () => {
-        window.location.href = `mailto:${EMAIL}`
+        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
       },
     },
   },
@@ -68,12 +68,12 @@ const experience: ExperienceItem[] = [
   {
     role: 'GenAI Software Engineer',
     org: 'Bespin Global',
-    period: '2026.06 — Present',
+    period: '2026.06 — 2026.07',
     bullets: [
-      'Design and build RAG systems for enterprise clients — document ingestion, chunking and embedding strategies, hybrid retrieval, and answer grounding with citations.',
-      'Develop AI agent workflows that decompose business tasks into tool-using, multi-step executions with guardrails and human-in-the-loop checkpoints.',
-      'Build and maintain MCP (Model Context Protocol) servers that connect LLMs to internal APIs, databases, and knowledge bases with safe, typed tool interfaces.',
-      'Ship on AWS Bedrock and own the reliability side: retrieval evaluation, prompt regression testing, and observability for LLM services in production.',
+      'Designed and built RAG systems for enterprise clients — document ingestion, chunking and embedding strategies, hybrid retrieval, and answer grounding with citations.',
+      'Developed AI agent workflows that decompose business tasks into tool-using, multi-step executions with guardrails and human-in-the-loop checkpoints.',
+      'Built and maintained MCP (Model Context Protocol) servers that connect LLMs to internal APIs, databases, and knowledge bases with safe, typed tool interfaces.',
+      'Worked on AWS Bedrock and owned the reliability side: retrieval evaluation, prompt regression testing, and observability for LLM-based services.',
     ],
     tags: ['Python', 'RAG', 'MCP', 'AI Agents', 'AWS Bedrock', 'Vector Search'],
   },
@@ -88,7 +88,7 @@ const experience: ExperienceItem[] = [
     tags: ['Leadership', 'Network Operations', 'Mandatory Service'],
   },
   {
-    role: 'Associate Software Engineer',
+    role: 'Associate Software Engineer (Industrial Placement)',
     org: 'Vitality',
     period: '2023.07 — 2024.07',
     bullets: [
@@ -119,14 +119,15 @@ const featuredProjects: FeaturedProject[] = [
     title: 'Insurance Document RAG — 96% accuracy on an SLM',
     meta: 'Bespin Global · 2026',
     description:
-      'Production vector-RAG system over a global insurance provider’s policy documents, shipped end-to-end as a FastAPI service with a React front end. Engineered the pipeline so an SLM (Qwen) holds 96% answer accuracy on the golden test set — within 2 points of the 98% Claude Sonnet baseline, while cutting a four-figure daily inference bill to a fraction.',
+      'Vector-RAG system architected and built end-to-end for a global insurance provider’s policy documents — a FastAPI backend with a React front end. Engineered the pipeline so an SLM (Qwen) holds 96% answer accuracy on the golden test set — within 2 points of the 98% Claude Sonnet baseline, while cutting a four-figure daily inference bill to a fraction.',
     highlights: [
       'Multi-engine document parsing (PyMuPDF4LLM, Docling, PaddleOCR), with Claude on AWS Bedrock converting tables, images, and flowcharts into LLM-readable text.',
       'Hybrid chunking that preserves both token budgets and table structure, combined with LangChain’s RecursiveCharacterTextSplitter for plain prose.',
       'Titan Embeddings v2 into Weaviate and ChromaDB with hybrid retrieval (BM25 + vector) — BM25 tuned at the tokeniser level (Kagome KR, trigram) for Korean policy terms, then sharpened with LLM-based reranking.',
-      'Prompt-engineered generation that grounds Qwen’s answers in retrieved chunks, evaluated continuously with golden-set accuracy and RAGAS metrics.',
+      'Prompt engineering for generation: few-shot examples to lock in domain tone, a strict JSON output schema for downstream parsing, and citation grounding that forces every answer to cite the source chunk it was drawn from.',
+      'Continuously evaluated against golden-set accuracy and RAGAS metrics to catch regressions before they reached users.',
     ],
-    tags: ['Python', 'FastAPI', 'React', 'AWS Bedrock', 'LangChain', 'Weaviate', 'ChromaDB', 'RAGAS'],
+    tags: ['Python', 'FastAPI', 'React', 'AWS Bedrock', 'LangChain', 'Weaviate', 'ChromaDB', 'Prompt Engineering', 'RAGAS'],
     featured: true,
   },
   {
@@ -154,6 +155,7 @@ const skillGroups: SkillGroup[] = [
     title: 'GenAI / LLM',
     items: [
       'RAG pipelines',
+      'Prompt engineering',
       'LangChain',
       'AWS Bedrock',
       'Vector DBs — Weaviate · ChromaDB',
