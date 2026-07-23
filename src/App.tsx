@@ -42,7 +42,7 @@ const portfolioData: PortfolioPageProps = {
   },
   hero: {
     titleLine1: 'GenAI Software Engineer,',
-    titleLine2Gradient: 'building RAG systems that measure up',
+    titleLine2Gradient: 'Building production-ready AI systems',
     subtitle:
       'Chanyeong Yun — built RAG and LLM-evaluation pipelines on AWS Bedrock at Bespin Global. Previously a software engineer at Vitality, one of the UK’s largest health & life insurers. Final-year Software Engineering student at Bournemouth University, graduating June 2027 and looking for my next role building AI-powered software.',
   },
