@@ -1,5 +1,6 @@
 import { PortfolioPage, type PortfolioPageProps } from '@/components/ui/starfall-portfolio-landing'
 import {
+  SummarySection,
   ExperienceSection,
   FeaturedProjectsSection,
   SkillsSection,
@@ -41,17 +42,21 @@ const portfolioData: PortfolioPageProps = {
     alt: 'Chanyeong Yun',
   },
   hero: {
+    badge: 'Open to GenAI & ML roles',
     titleLine1: 'GenAI Software Engineer,',
-    titleLine2Gradient: 'Building production-ready AI systems',
-    subtitle:
-      """I’m a GenAI Software Engineer passionate about building reliable AI systems that solve real-world problems.
-
-At Bespin Global, a leading cloud and AI consultancy and AWS Premier Tier Services Partner, I developed enterprise-grade RAG systems on AWS Bedrock, designed ontology-driven retrieval architectures for insurance knowledge using Palantir Ontology, and built evaluation pipelines to improve the accuracy and reliability of AI applications.
-
-Previously, I worked as a Software Engineer at Vitality, one of the UK’s leading health and life insurers, where I gained experience building scalable software solutions in a regulated industry.
-
-I’m currently completing my BSc in Software Engineering at Bournemouth University (graduating June 2027) and am seeking opportunities to build impactful AI-powered software that bridges cutting-edge research with practical business applications.,
-"""  },
+    titleLine2Gradient: 'building production-ready AI',
+    subtitle: 'I design reliable AI systems that solve real-world problems — from retrieval pipelines to LLM-powered products in production.',
+    tags: ['Python', 'LangChain', 'AWS Bedrock', 'RAG'],
+    image: {
+      src: '/photos/aws.webp',
+      alt: 'Chanyeong at AWS Student Community Day, Seoul',
+    },
+    imageCaption: {
+      icon: 'a',
+      title: 'AWS Student Community Day',
+      sub: 'Invited attendee · Seoul 2024',
+    },
+  },
   ctaButtons: {
     primary: {
       label: 'Explore My Work',
@@ -70,6 +75,12 @@ I’m currently completing my BSc in Software Engineering at Bournemouth Univers
   stats: [],
   showAnimatedBackground: true,
 }
+
+const summary: string[] = [
+  'At Bespin Global, a leading cloud and AI consultancy and AWS Premier Tier Services Partner, I developed enterprise-grade RAG systems on AWS Bedrock, designed ontology-driven retrieval architectures for insurance knowledge using Palantir Ontology, and built evaluation pipelines to improve the accuracy and reliability of AI applications.',
+  'Previously, I worked as a Software Engineer at Vitality, one of the UK’s leading health and life insurers, where I gained experience building scalable software solutions in a regulated industry.',
+  'I’m currently completing my BSc in Software Engineering at Bournemouth University (graduating June 2027) and am seeking opportunities to build impactful AI-powered software that bridges cutting-edge research with practical business applications.',
+]
 
 const experience: ExperienceItem[] = [
   {
@@ -148,8 +159,20 @@ const featuredProjects: FeaturedProject[] = [
         label: 'Parse',
         title: 'Multi-engine extraction',
         desc: 'Documents parsed primarily with PyMuPDF4LLM, with PaddleOCR for scanned pages and a vision LLM converting tables, images, and flowcharts into clean, LLM-readable text.',
-        insight:
-          'Built an internal parsing playground to make that call with evidence rather than guesswork — a harness that runs the same policy document through Docling, PyMuPDF, pdfplumber, pypdf, pdfminer.six and Unstructured side by side, diffing extracted text, tables, and latency to see which held up on scanned tables and multi-column layouts. Docling captured layout and tables most accurately, but was too slow across the corpus — roughly 100 policy documents averaging 200+ pages each. Traded some layout fidelity for PyMuPDF4LLM’s speed on the bulk of the corpus, and routed images, flowcharts, and reference diagrams to a vision LLM — initially Claude Sonnet on AWS Bedrock.',
+        insightSteps: [
+          {
+            label: 'The harness',
+            text: 'Built an internal parsing playground that runs the same policy document through Docling, PyMuPDF, pdfplumber, pypdf, pdfminer.six and Unstructured side by side, diffing extracted text, tables, and latency.',
+          },
+          {
+            label: 'What it showed',
+            text: 'Docling captured layout and tables most accurately, but was too slow across the corpus — roughly 100 policy documents averaging 200+ pages each.',
+          },
+          {
+            label: 'The trade-off',
+            text: 'Traded some layout fidelity for PyMuPDF4LLM’s speed on the bulk of the corpus, and routed images, flowcharts, and reference diagrams to a vision LLM — initially Claude Sonnet on AWS Bedrock.',
+          },
+        ],
         image: '/projects/parsing-playground.png',
         imageCaption: 'Parser comparison playground I built — same policy PDF run through Docling, PyMuPDF, pdfplumber and others side by side.',
         tags: ['PyMuPDF4LLM', 'Docling', 'Parser Benchmarking', 'PaddleOCR', 'Claude · Bedrock'],
@@ -157,8 +180,25 @@ const featuredProjects: FeaturedProject[] = [
       {
         label: 'Chunk',
         title: 'Hybrid chunking',
-        desc: 'Table-aware splitting preserves both token budgets and table structure, paired with LangChain’s recursive splitter for plain prose.',
-        tags: ['Table-aware', 'LangChain'],
+        desc: 'A custom chunker splits each parsed page along its document structure — sections, procedures, and whole/block/row-level tables — so table integrity and heading hierarchy survive the split, paired with LangChain’s recursive splitter for plain prose under a hard token ceiling.',
+        insightSteps: [
+          {
+            label: 'The simulator',
+            text: 'Pick a parsed Markdown document and watch rag_chunker.py build chunks live — source on the left, chunked output on the right — with search_text inspectable per chunk.',
+          },
+          {
+            label: 'What it caught',
+            text: 'Cases where a naive fixed-size split would have separated a table from its heading, or cut a procedure mid-step.',
+          },
+          {
+            label: 'The result',
+            text: 'Structure-aware splitting kept sections, procedures, and tables intact while the recursive splitter handled prose — all under a fixed token budget.',
+          },
+        ],
+        image: '/projects/chunking-stage.png',
+        imageLabel: 'rag_chunker · simulator',
+        imageCaption: 'Same parsed document, structure-aware chunks on the right — search_text inspectable per chunk.',
+        tags: ['Table-aware', 'LangChain', 'Token budgeting', 'Pipeline Simulator'],
       },
       {
         label: 'Index',
@@ -372,6 +412,7 @@ function App() {
     <>
       <PortfolioPage {...portfolioData} />
       <div className="sections-bg">
+        <SummarySection paragraphs={summary} />
         <FeaturedProjectsSection projects={featuredProjects} />
         <ExperienceSection items={experience} education={education} />
         <SkillsSection groups={skillGroups} />

@@ -11,7 +11,15 @@ export interface PortfolioPageProps {
   navLinks?: NavLink[];
   resume?: { label: string; onClick?: () => void; };
   avatar?: { src: string; alt: string; };
-  hero?: { titleLine1: React.ReactNode; titleLine2Gradient: React.ReactNode; subtitle: React.ReactNode; };
+  hero?: {
+    titleLine1: React.ReactNode;
+    titleLine2Gradient: React.ReactNode;
+    subtitle: React.ReactNode;
+    badge?: React.ReactNode;
+    tags?: string[];
+    image?: { src: string; alt: string };
+    imageCaption?: { icon?: React.ReactNode; title: React.ReactNode; sub: React.ReactNode };
+  };
   ctaButtons?: { primary: { label: string; onClick?: () => void; }; secondary: { label: string; onClick?: () => void; }; };
   projects?: Project[];
   stats?: Stat[];
@@ -304,10 +312,17 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
         </nav>
         <div className="divider" />
         <main id="about" className="w-full min-h-screen flex flex-col items-center justify-center px-6 py-20">
-            <div className="max-w-6xl mx-auto text-center">
-                <div className="mb-8 float-animation">
-                    {avatar && (
-                        <div className="flex justify-center mb-8">
+            <div className="max-w-6xl mx-auto w-full">
+              <div className={`grid gap-12 lg:gap-16 items-center mb-16 ${hero.image ? 'lg:grid-cols-[1.05fr_0.95fr]' : 'text-center'}`}>
+                <div className={hero.image ? 'text-left' : 'text-center'}>
+                    {hero.badge && (
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-button mb-8">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_2px_rgba(52,211,153,0.55)]" />
+                            <span className="inter-font text-xs font-medium text-foreground/90">{hero.badge}</span>
+                        </div>
+                    )}
+                    {avatar && !hero.image && (
+                        <div className={`flex mb-8 float-animation ${hero.image ? '' : 'justify-center'}`}>
                             <div className="p-[3px] rounded-full bg-gradient-to-br from-[#67b7f7] via-[#7d8cfa] to-[#9b7bff] shadow-[0_8px_40px_rgba(125,140,250,0.35)]">
                                 <img
                                     src={avatar.src}
@@ -317,16 +332,47 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                             </div>
                         </div>
                     )}
-                    <h1 className="md:text-6xl lg:text-7xl leading-[1.1] geist-font text-5xl font-light text-foreground tracking-tight mb-4">
+                    <h1 className="md:text-6xl lg:text-7xl leading-[1.1] geist-font text-5xl font-light text-foreground tracking-tight mb-5">
                         {hero.titleLine1}
                         <span className="gradient-text block tracking-tight">{hero.titleLine2Gradient}</span>
                     </h1>
-                    <p className="md:text-xl max-w-3xl leading-relaxed inter-font text-lg font-light text-muted-foreground mx-auto">{hero.subtitle}</p>
+                    <p className={`md:text-xl leading-relaxed inter-font text-lg font-light text-muted-foreground ${hero.image ? 'max-w-xl' : 'max-w-3xl mx-auto'}`}>{hero.subtitle}</p>
+                    {hero.tags && hero.tags.length > 0 && (
+                        <div className={`flex flex-wrap gap-3 mt-7 ${hero.image ? '' : 'justify-center'}`}>
+                            {hero.tags.map(tag => (
+                                <span key={tag} className="skill-badge px-4 py-2 rounded-lg text-sm text-foreground/85 inter-font">{tag}</span>
+                            ))}
+                        </div>
+                    )}
+                    <div className={`flex flex-col sm:flex-row gap-4 mt-9 ${hero.image ? '' : 'justify-center items-center'}`}>
+                        <button onClick={ctaButtons.primary.onClick} className="primary-button px-6 py-3 text-foreground rounded-lg font-medium text-sm min-w-[160px]">{ctaButtons.primary.label}</button>
+                        <button onClick={ctaButtons.secondary.onClick} className="glass-button min-w-[160px] inter-font text-sm font-medium text-foreground rounded-lg px-6 py-3">{ctaButtons.secondary.label}</button>
+                    </div>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-                    <button onClick={ctaButtons.primary.onClick} className="primary-button px-6 py-3 text-foreground rounded-lg font-medium text-sm min-w-[160px]">{ctaButtons.primary.label}</button>
-                    <button onClick={ctaButtons.secondary.onClick} className="glass-button min-w-[160px] inter-font text-sm font-medium text-foreground rounded-lg px-6 py-3">{ctaButtons.secondary.label}</button>
-                </div>
+                {hero.image && (
+                    <div className="relative mx-auto w-full max-w-sm lg:max-w-none pb-8">
+                        <div className="relative rounded-[28px] overflow-hidden border border-white/10 shadow-[0_30px_90px_-30px_rgba(80,90,220,0.45)] aspect-[4/5]">
+                            <img
+                                src={hero.image.src}
+                                alt={hero.image.alt}
+                                className="w-full h-full object-cover"
+                            />
+                            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+                        </div>
+                        {hero.imageCaption && (
+                            <div className="glass-card absolute -bottom-2 left-4 right-4 sm:left-6 sm:right-6 rounded-2xl px-4 py-3.5 flex items-center gap-3 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)]">
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-semibold text-sm shrink-0 geist-font">
+                                    {hero.imageCaption.icon}
+                                </div>
+                                <div className="text-left min-w-0">
+                                    <div className="geist-font text-sm font-medium text-foreground leading-snug truncate">{hero.imageCaption.title}</div>
+                                    <div className="inter-font text-xs text-muted-foreground truncate">{hero.imageCaption.sub}</div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+              </div>
                 {(projects.length > 0 || stats.length > 0) && <div className="divider mb-16" />}
                 {projects.length > 0 && (
                     <>

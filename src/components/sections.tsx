@@ -53,14 +53,18 @@ export interface ProjectStage {
   label: string
   /** 단계 제목 (예: 'Source documents') */
   title: string
-  /** 단계 상세 설명 */
+  /** 단계 상세 설명 — 이미지 아래 좌측 컬럼에 표시 */
   desc: string
-  /** 실제로 겪은 트레이드오프·판단 근거 — 있으면 강조된 콜아웃으로 표시됩니다 */
+  /** @deprecated insightSteps로 대체 — 구조화되지 않은 단일 문단 인사이트 (fallback) */
   insight?: string
+  /** 실제로 겪은 트레이드오프·판단 근거를 3단계로 구조화 — 있으면 desc 옆 컬럼에 번호 목록으로 표시됩니다 */
+  insightSteps?: { label: string; text: string }[]
   /** 단계에서 사용한 도구·기술 태그 */
   tags?: string[]
-  /** 단계 근거를 보여주는 스크린샷 — 있으면 텍스트 옆에 브라우저 프레임으로 표시됩니다 */
+  /** 단계 근거를 보여주는 스크린샷 — 있으면 제목 아래 풀와이드 브라우저 프레임으로 표시됩니다 */
   image?: string
+  /** 브라우저 프레임 상단 바에 표시할 짧은 라벨 (예: 'rag_chunker · simulator') */
+  imageLabel?: string
   /** 스크린샷 아래 표시할 한 줄 캡션 */
   imageCaption?: string
 }
@@ -125,6 +129,19 @@ const Section: React.FC<{
       <div className="divider" />
     </div>
   </section>
+)
+
+// --- PROFESSIONAL SUMMARY ---
+export const SummarySection: React.FC<{ paragraphs: string[] }> = ({ paragraphs }) => (
+  <Section id="summary" eyebrow="Summary" title={<>Professional <span className="gradient-text">summary</span></>}>
+    <div className="glass-card rounded-2xl p-6 md:p-8 flex flex-col gap-4 text-left max-w-3xl mx-auto">
+      {paragraphs.map((p) => (
+        <p key={p} className="inter-font text-sm md:text-base text-muted-foreground leading-relaxed">
+          {p}
+        </p>
+      ))}
+    </div>
+  </Section>
 )
 
 // --- EXPERIENCE (timeline + compact education block) ---
@@ -285,51 +302,68 @@ const StageExplorer: React.FC<{ stages: ProjectStage[] }> = ({ stages }) => {
       {/* active stage detail */}
       <div className="glass-card rounded-xl p-5 md:p-6 mt-4">
         <div key={active} className="project-detail-fade">
-          <div className={s.image ? 'grid md:grid-cols-[1fr_1fr] gap-6 lg:gap-10 items-center' : ''}>
-            <div className="min-w-0">
-              <div className="inter-font text-[10px] font-semibold tracking-[0.18em] uppercase text-[#7d8cfa] mb-2">
-                Step {idx(active)} · {s.label}
-              </div>
-              <h4 className="geist-font text-lg md:text-xl font-semibold text-card-foreground leading-tight">
-                {s.title}
-              </h4>
-              <p className="inter-font text-sm md:text-[15px] text-muted-foreground leading-relaxed mt-2.5">
-                {s.desc}
-              </p>
-            </div>
-
-            {s.image && (
-              <div className="min-w-0 mt-5 md:mt-0">
-                <div className="rounded-xl overflow-hidden border border-white/10 bg-black/30 shadow-[0_20px_60px_-25px_rgba(0,0,0,0.65)]">
-                  <div className="flex items-center gap-1.5 px-3 py-2.5 bg-white/[0.05] border-b border-white/10">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]/70" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]/70" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]/70" />
-                  </div>
-                  <img
-                    src={s.image}
-                    alt={`${s.title} — screenshot`}
-                    className="w-full h-auto block"
-                    loading="lazy"
-                  />
-                </div>
-                {s.imageCaption && (
-                  <p className="inter-font text-[11px] text-muted-foreground/70 mt-2.5 text-center leading-relaxed">
-                    {s.imageCaption}
-                  </p>
-                )}
-              </div>
-            )}
+          <div className="inter-font text-[10px] font-semibold tracking-[0.18em] uppercase text-[#7d8cfa] mb-2">
+            Step {idx(active)} · {s.label}
           </div>
+          <h4 className="geist-font text-xl md:text-2xl font-semibold text-card-foreground leading-tight mb-5">
+            {s.title}
+          </h4>
 
-          {s.insight && (
-            <div className="mt-5 rounded-lg border-l-2 border-[#7d8cfa]/50 bg-white/[0.025] pl-4 pr-4 md:pr-6 py-3.5">
-              <div className="inter-font text-[10px] font-semibold tracking-[0.14em] uppercase text-[#9b7bff] mb-1.5">
-                Trade-off
+          {s.image && (
+            <div className="min-w-0 mb-6">
+              <div className="rounded-xl overflow-hidden border border-white/10 bg-[#0b0d12] shadow-[0_24px_70px_-25px_rgba(0,0,0,0.7)]">
+                <div className="flex items-center gap-2 px-3 py-2.5 bg-white/[0.05] border-b border-white/10">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]/70" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]/70" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]/70" />
+                  {s.imageLabel && (
+                    <span className="inter-font text-[11px] text-muted-foreground/60 ml-1.5">{s.imageLabel}</span>
+                  )}
+                </div>
+                <img
+                  src={s.image}
+                  alt={`${s.title} — screenshot`}
+                  className="w-full h-auto block"
+                  loading="lazy"
+                />
               </div>
-              <p className="inter-font text-sm text-card-foreground/90 leading-relaxed">{s.insight}</p>
+              {s.imageCaption && (
+                <p className="inter-font text-[11px] text-muted-foreground/70 mt-2.5 text-center leading-relaxed">
+                  {s.imageCaption}
+                </p>
+              )}
             </div>
           )}
+
+          <div
+            className={`min-w-0 ${
+              s.insightSteps && s.insightSteps.length > 0
+                ? 'grid md:grid-cols-[1fr_1fr] gap-x-8 lg:gap-x-10 gap-y-6 pt-5 border-t border-white/10'
+                : ''
+            }`}
+          >
+            <p className="inter-font text-sm md:text-[15px] text-muted-foreground leading-relaxed">{s.desc}</p>
+
+            {s.insightSteps && s.insightSteps.length > 0 && (
+              <div className="flex flex-col gap-5">
+                {s.insightSteps.map((step, i) => (
+                  <div key={step.label}>
+                    <div className="inter-font text-[10px] font-semibold tracking-[0.14em] uppercase text-[#7d8cfa] mb-1.5 flex items-center gap-2">
+                      <span className="tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                      {step.label}
+                    </div>
+                    <p className="inter-font text-sm text-muted-foreground leading-relaxed">{step.text}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {!s.insightSteps && s.insight && (
+              <p className="inter-font text-sm md:text-[15px] text-muted-foreground leading-relaxed mt-3">
+                {s.insight}
+              </p>
+            )}
+          </div>
 
           {s.tags && s.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-4">
