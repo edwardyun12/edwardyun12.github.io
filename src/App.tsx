@@ -14,6 +14,7 @@ import {
   type Article,
   type Moment,
 } from '@/components/sections'
+import { Database, Layers, Network, Mic, ScanSearch, Trophy } from 'lucide-react'
 
 const GITHUB_URL = 'https://github.com/edwardyun12'
 const LINKEDIN_URL = 'https://uk.linkedin.com/in/chanyeongyun'
@@ -41,9 +42,9 @@ const portfolioData: PortfolioPageProps = {
   },
   hero: {
     titleLine1: 'GenAI Software Engineer,',
-    titleLine2Gradient: 'building production AI systems',
+    titleLine2Gradient: 'building RAG systems that measure up',
     subtitle:
-      'Chanyeong Yun — built RAG systems and AI agent workflows on AWS Bedrock at Bespin Global, an AWS Premier Tier Partner and one of Asia’s leading cloud MSPs. Previously completed a 12-month software engineering placement at Vitality, one of the UK’s largest health & life insurers. Final-year Software Engineering student at Bournemouth University, graduating June 2027 and seeking graduate roles building AI-powered software.',
+      'Chanyeong Yun — built RAG and LLM-evaluation pipelines on AWS Bedrock at Bespin Global. Previously a software engineer at Vitality, one of the UK’s largest health & life insurers. Final-year Software Engineering student at Bournemouth University, graduating June 2027 and looking for my next role building AI-powered software.',
   },
   ctaButtons: {
     primary: {
@@ -69,18 +70,19 @@ const experience: ExperienceItem[] = [
     role: 'GenAI Software Engineer',
     org: 'Bespin Global',
     period: '2026.06 — 2026.07',
+    logo: '/logos/bespin.webp',
     bullets: [
-      'Designed and built RAG systems for enterprise clients — document ingestion, chunking and embedding strategies, hybrid retrieval, and answer grounding with citations.',
-      'Developed AI agent workflows that decompose business tasks into tool-using, multi-step executions with guardrails and human-in-the-loop checkpoints.',
-      'Built and maintained MCP (Model Context Protocol) servers that connect LLMs to internal APIs, databases, and knowledge bases with safe, typed tool interfaces.',
-      'Worked on AWS Bedrock and owned the reliability side: retrieval evaluation, prompt regression testing, and observability for LLM-based services.',
+      'Architected and built a vector-RAG system over enterprise insurance documents on AWS Bedrock, engineering the pipeline so a lightweight open-weight model (Qwen 3.5-35B-A3B) held 94% answer accuracy — within a point of the Sonnet 4.6 baseline, while cutting a daily inference bill of thousands of dollars to a fraction.',
+      'Built an LLM-based customer-question classification pipeline (Claude Haiku on Bedrock) across 21 business domains, reaching 93.24% accuracy through evaluation-driven prompt design and a two-stage guideline-generation architecture.',
+      'Owned evaluation and cost analysis for GenAI services — golden-set accuracy tracking, RAGAS metrics, and region/latency/cost trade-off decisions for Bedrock deployments.',
     ],
-    tags: ['Python', 'RAG', 'MCP', 'AI Agents', 'AWS Bedrock', 'Vector Search'],
+    tags: ['Python', 'RAG', 'LLM Evaluation', 'Prompt Engineering', 'AWS Bedrock', 'Vector Search'],
   },
   {
     role: 'Tactical Systems & Communications Squad Leader, Sergeant',
     org: 'Republic of Korea Army',
     period: '2024.09 — 2026.03',
+    logo: '/logos/army.webp',
     bullets: [
       'Mandatory military service — led a squad of 8+ personnel coordinating technical operations to keep tactical systems at high availability.',
       'Managed and optimised tactical network infrastructure, proactively troubleshooting hardware and signal issues to ensure 24/7 connectivity.',
@@ -91,6 +93,8 @@ const experience: ExperienceItem[] = [
     role: 'Associate Software Engineer (Industrial Placement)',
     org: 'Vitality',
     period: '2023.07 — 2024.07',
+    logo: '/logos/vitality.webp',
+    logoFill: true,
     bullets: [
       'Developed and maintained production backend services in a GraphQL engineering team — GraphQL, NestJS, TypeScript, and Node.js — at one of the UK’s largest health & life insurers.',
       'Built and optimised an internal testing tool with React, JavaScript, and Sitecore, significantly improving development and testing workflows.',
@@ -116,30 +120,129 @@ const education: ExperienceItem[] = [
 // 실무 프로젝트는 repoUrl/demoUrl 없이 설명·하이라이트로만 — 버튼은 자동으로 숨겨집니다.
 const featuredProjects: FeaturedProject[] = [
   {
-    title: 'Insurance Document RAG — 96% accuracy on an SLM',
+    title: 'Insurance Document RAG — 94% accuracy on an SLM',
+    navTitle: 'Insurance Document RAG',
     meta: 'Bespin Global · 2026',
+    icon: <Database strokeWidth={1.25} />,
+    stats: [
+      { value: '94%', label: 'Qwen SLM answer accuracy' },
+      { value: '−1pt', label: 'vs 95% Sonnet 4.6 baseline' },
+      { value: '$1000s/day', label: 'inference cost cut' },
+    ],
     description:
-      'Vector-RAG system architected and built end-to-end for a global insurance provider’s policy documents — a FastAPI backend with a React front end. Engineered the pipeline so an SLM (Qwen) holds 96% answer accuracy on the golden test set — within 2 points of the 98% Claude Sonnet baseline, while cutting a four-figure daily inference bill to a fraction.',
-    highlights: [
-      'Multi-engine document parsing (PyMuPDF4LLM, Docling, PaddleOCR), with Claude on AWS Bedrock converting tables, images, and flowcharts into LLM-readable text.',
-      'Hybrid chunking that preserves both token budgets and table structure, combined with LangChain’s RecursiveCharacterTextSplitter for plain prose.',
-      'Titan Embeddings v2 into Weaviate and ChromaDB with hybrid retrieval (BM25 + vector) — BM25 tuned at the tokeniser level (Kagome KR, trigram) for Korean policy terms, then sharpened with LLM-based reranking.',
-      'Prompt engineering for generation: few-shot examples to lock in domain tone, a strict JSON output schema for downstream parsing, and citation grounding that forces every answer to cite the source chunk it was drawn from.',
-      'Continuously evaluated against golden-set accuracy and RAGAS metrics to catch regressions before they reached users.',
+      'Insurance domain-specific Q&A RAG system, designed and built end-to-end for a global insurer’s policy documents — a FastAPI backend with a React front end. Started from a 95% accuracy baseline on AWS Bedrock’s Sonnet 4.6, then, to optimise cost, moved to a lightweight SLM (Qwen 3.5-35B-A3B) and pushed answer accuracy back to 94% in three weeks — cutting a daily inference bill of thousands of dollars to a fraction.',
+    stages: [
+      {
+        label: 'Ingest',
+        title: 'Source documents',
+        desc: 'A global insurer’s policy documents — PDF forms, scanned tables, and flowcharts — ingested as the corpus behind every answer.',
+        tags: ['PDF', 'Insurance policies'],
+      },
+      {
+        label: 'Parse',
+        title: 'Multi-engine extraction',
+        desc: 'Documents parsed primarily with PyMuPDF4LLM, with PaddleOCR for scanned pages and a vision LLM converting tables, images, and flowcharts into clean, LLM-readable text.',
+        insight:
+          'Built an internal parsing playground to make that call with evidence rather than guesswork — a harness that runs the same policy document through Docling, PyMuPDF, pdfplumber, pypdf, pdfminer.six and Unstructured side by side, diffing extracted text, tables, and latency to see which held up on scanned tables and multi-column layouts. Docling captured layout and tables most accurately, but was too slow across the corpus — roughly 100 policy documents averaging 200+ pages each. Traded some layout fidelity for PyMuPDF4LLM’s speed on the bulk of the corpus, and routed images, flowcharts, and reference diagrams to a vision LLM — initially Claude Sonnet on AWS Bedrock.',
+        image: '/projects/parsing-playground.png',
+        imageCaption: 'Parser comparison playground I built — same policy PDF run through Docling, PyMuPDF, pdfplumber and others side by side.',
+        tags: ['PyMuPDF4LLM', 'Docling', 'Parser Benchmarking', 'PaddleOCR', 'Claude · Bedrock'],
+      },
+      {
+        label: 'Chunk',
+        title: 'Hybrid chunking',
+        desc: 'Table-aware splitting preserves both token budgets and table structure, paired with LangChain’s recursive splitter for plain prose.',
+        tags: ['Table-aware', 'LangChain'],
+      },
+      {
+        label: 'Index',
+        title: 'Embed & store',
+        desc: 'Titan Embeddings v2 written into Weaviate and ChromaDB, indexed for fast hybrid retrieval.',
+        tags: ['Titan v2', 'Weaviate', 'ChromaDB'],
+      },
+      {
+        label: 'Retrieve',
+        title: 'Hybrid + rerank',
+        desc: 'BM25 — tuned at the tokeniser level (Kagome KR, trigram) for Korean policy terms — fused with vector search, then sharpened by LLM-based reranking.',
+        tags: ['BM25', 'Vector', 'LLM rerank'],
+      },
+      {
+        label: 'Generate',
+        title: 'SLM answer synthesis',
+        desc: 'Qwen 3.5-35B-A3B answers at 94% — within a point of the Sonnet 4.6 baseline, at a fraction of the cost. A strict JSON schema and citation grounding force every answer to cite its source chunk.',
+        tags: ['Qwen 3.5-35B-A3B', 'JSON schema', 'Citations'],
+      },
     ],
     tags: ['Python', 'FastAPI', 'React', 'AWS Bedrock', 'LangChain', 'Weaviate', 'ChromaDB', 'Prompt Engineering', 'RAGAS'],
-    featured: true,
+  },
+  {
+    title: 'Customer Query Classification — 93.24% across 21 domains',
+    navTitle: 'Customer Query Classification',
+    meta: 'Bespin Global · 2026',
+    icon: <Layers strokeWidth={1.25} />,
+    stats: [
+      { value: '93.24%', label: 'accuracy' },
+      { value: '0.94', label: 'Macro F1' },
+      { value: '21', label: 'business domains' },
+    ],
+    description:
+      'LLM-based pipeline that automatically routes call-centre customer questions to the correct business domain for a large insurance provider. Built with Claude Haiku on AWS Bedrock, reaching 93.24% accuracy (Macro F1 0.9432) on a 695-question evaluation set — 14 of 21 domains hit 100%.',
+    highlights: [
+      'Two-stage architecture: an LLM first mines labelled examples to auto-generate per-domain classification guidelines (an "ontologist" persona prompt), then a second pass classifies new questions in parallel batches against those guidelines.',
+      'A hard-boundary rule matrix injected ahead of the model’s own judgement to eliminate recurring confusions between frequently-mixed domains.',
+      'Evaluation-driven iteration: per-class precision/recall (not just headline accuracy) pinpointed exactly which domains needed sharper rules, with an auto-generated error notebook driving each round of prompt fixes.',
+    ],
+    tags: ['Python', 'AWS Bedrock', 'Claude Haiku', 'Prompt Engineering', 'Evaluation'],
+  },
+  {
+    title: 'GraphRAG for Insurance — a knowledge-graph prototype',
+    navTitle: 'GraphRAG for Insurance',
+    meta: 'Bespin Global · 2026 (R&D spike)',
+    icon: <Network strokeWidth={1.25} />,
+    description:
+      'A proof-of-concept exploring where knowledge graphs outperform vector search on domain documents. Built a Neo4j sandbox modelling how the pipeline’s hardest cases for VectorRAG — complex compound medical terms that embeddings struggle to disambiguate — could instead be captured as explicit graph relationships, testing where a GraphRAG approach earns its added complexity over plain vector retrieval.',
+    tags: ['Neo4j', 'GraphRAG', 'Knowledge Graph', 'Ontology', 'Cypher'],
+  },
+  {
+    title: 'Nexus — a voice-first AI agent that runs my job hunt',
+    navTitle: 'Nexus — voice AI agent',
+    meta: 'Personal project · 2026',
+    icon: <Mic strokeWidth={1.25} />,
+    image: '/projects/nexus.png',
+    stats: [
+      { value: '3', label: 'LLM-callable tools' },
+      { value: '1', label: 'MCP server, from scratch' },
+      { value: 'Live', label: 'public demo, no sign-up' },
+    ],
+    description:
+      'Not a wrapper around an LLM API — Nexus runs a full tool-calling loop against job-tracker-mcp, a Model Context Protocol server I built from scratch, so the model decides when to call add_application / list_applications / update_status and how to fill the arguments from a spoken sentence, then reads the result back to you. Deployed live with a self-cleaning public demo — no sign-up, no setup, break it freely.',
+    highlights: [
+      'Built the MCP tool layer myself rather than proxying Notion’s own API — designing the actual typed interface an LLM reasons over, not just relaying a REST call.',
+      'One codebase, two runtimes: Vite dev middleware locally, a thin Express server in production, sharing the same auth and request-handling logic so the two paths can’t drift.',
+      'A self-cleaning public demo — the live instance points at a sandbox Notion workspace that’s wiped and re-seeded every 30 minutes, so visitors get a real writable environment with nothing at risk.',
+      'Security sized to the threat model: per-IP and global-daily rate limits, capped request bodies, upstream errors never relayed verbatim, timing-safe access-key comparison.',
+      'Voice as a first-class input — wake-word listening, speech recognition, and text-to-speech via the Web Speech API, with the mic cut the instant Nexus starts speaking.',
+    ],
+    tags: ['React', 'TypeScript', 'MCP', 'Node.js', 'Express', 'Notion API', 'Web Speech API'],
+    repoUrl: 'https://github.com/edwardyun12/nexus-ai',
+    demoUrl: 'https://nexus-ai-zkmf.onrender.com',
   },
   {
     title: 'HireReady AI — LLM-powered CV analysis',
+    navTitle: 'HireReady AI',
     meta: 'Personal project · 2025 — Present',
+    icon: <ScanSearch strokeWidth={1.25} />,
     description:
       'Full-stack platform that analyses CVs in real time and recommends skill optimisations to improve job-application success. React front end over an asynchronous FastAPI backend, with LLMs performing deep semantic analysis to surface critical skill gaps and data-driven recommendations.',
     tags: ['React', 'FastAPI', 'Python', 'LLM'],
+    repoUrl: 'https://github.com/edwardyun12/cv-job-matcher',
   },
   {
     title: '1st Place — JPMorgan Computing in Business Week',
+    navTitle: '1st Place — JPMorgan',
     meta: 'Bournemouth University · 2022',
+    icon: <Trophy strokeWidth={1.25} />,
+    stats: [{ value: '1st', label: 'of all competing teams' }],
     description:
       'Won first place in JPMorgan Chase’s Computing in Business Week competition. Translated stakeholder requirements into technical specifications and shipped a full-stack solution — Python/Flask backend with a responsive front end — earning an invitation to a two-day workshop at JPMorgan’s Bournemouth office.',
     tags: ['Python', 'Flask', 'Full-stack', 'Requirements Analysis'],

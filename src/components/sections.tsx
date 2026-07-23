@@ -1,5 +1,5 @@
 import React from 'react'
-import { ExternalLink, Mail, Award, ArrowUpRight, Link2, Copy, Check } from 'lucide-react'
+import { ExternalLink, Mail, Award, ArrowUpRight, Link2, Copy, Check, ChevronLeft, ChevronRight } from 'lucide-react'
 
 // lucide-react no longer ships brand icons — inline SVGs instead
 const Github: React.FC<{ className?: string }> = ({ className }) => (
@@ -20,6 +20,10 @@ export interface ExperienceItem {
   period: string
   bullets: string[]
   tags: string[]
+  /** 조직 로고 경로 — 있으면 흰색 라운드 칩 위에 표시됩니다 */
+  logo?: string
+  /** true면 로고가 칩을 꽉 채웁니다 (원형·풀블리드 로고용, 예: Vitality) */
+  logoFill?: boolean
 }
 export interface FeaturedProject {
   title: string
@@ -29,10 +33,36 @@ export interface FeaturedProject {
   demoUrl?: string
   /** 소속·기간 표시 (예: 'Bespin Global · 2026') */
   meta?: string
-  /** 상세 불릿 — 있으면 카드에 리스트로 표시됩니다 */
+  /** 상세 불릿 — 있으면 상세 패널에 리스트로 표시됩니다 */
   highlights?: string[]
-  /** true면 그리드 전체 폭을 차지하는 대표 카드로 렌더링 */
+  /** 왼쪽 목록에 표시할 짧은 제목 — 없으면 title 사용 */
+  navTitle?: string
+  /** 상세 패널 상단 미디어 영역의 아이콘 (스크린샷이 없을 때) */
+  icon?: React.ReactNode
+  /** 실제 스크린샷 경로 — 있으면 아이콘 대신 표시 */
+  image?: string
+  /** 핵심 지표 타일 (예: [{value:'96%', label:'golden-set accuracy'}]) */
+  stats?: { value: string; label: string }[]
+  /** 파이프라인 단계 탐색기 — 있으면 이미지 대신 인터랙티브 stage explorer가 표시됩니다 */
+  stages?: ProjectStage[]
+  /** @deprecated 더 이상 레이아웃에 사용되지 않음 */
   featured?: boolean
+}
+export interface ProjectStage {
+  /** 단계 라벨 (예: 'INGEST') */
+  label: string
+  /** 단계 제목 (예: 'Source documents') */
+  title: string
+  /** 단계 상세 설명 */
+  desc: string
+  /** 실제로 겪은 트레이드오프·판단 근거 — 있으면 강조된 콜아웃으로 표시됩니다 */
+  insight?: string
+  /** 단계에서 사용한 도구·기술 태그 */
+  tags?: string[]
+  /** 단계 근거를 보여주는 스크린샷 — 있으면 텍스트 옆에 브라우저 프레임으로 표시됩니다 */
+  image?: string
+  /** 스크린샷 아래 표시할 한 줄 캡션 */
+  imageCaption?: string
 }
 export interface SkillGroup {
   title: string
@@ -70,22 +100,25 @@ export interface FooterData {
 }
 
 // --- SHARED SECTION SHELL ---
-const Section: React.FC<{ id: string; eyebrow: string; title: React.ReactNode; children: React.ReactNode }> = ({
-  id,
-  eyebrow,
-  title,
-  children,
-}) => (
+const Section: React.FC<{
+  id: string
+  eyebrow: string
+  title: React.ReactNode
+  subtitle?: React.ReactNode
+  children: React.ReactNode
+}> = ({ id, eyebrow, title, subtitle, children }) => (
   <section id={id} className="relative w-full px-6 py-24">
     <div className="max-w-6xl mx-auto">
       <p className="inter-font text-xs font-semibold tracking-[0.3em] uppercase text-muted-foreground mb-4">
         <span className="text-[#7d8cfa]">{'// '}</span>
         {eyebrow}
       </p>
-      <h2 className="geist-font text-4xl md:text-5xl font-semibold tracking-tight text-foreground mb-14">
+      <h2 className="geist-font text-4xl md:text-5xl font-semibold tracking-tight text-foreground mb-3">
         {title}
         <span className="text-foreground">.</span>
       </h2>
+      {subtitle && <p className="inter-font text-base text-muted-foreground max-w-2xl mb-14">{subtitle}</p>}
+      {!subtitle && <div className="mb-14" />}
       {children}
     </div>
     <div className="max-w-6xl mx-auto mt-20">
@@ -94,32 +127,61 @@ const Section: React.FC<{ id: string; eyebrow: string; title: React.ReactNode; c
   </section>
 )
 
-// --- EXPERIENCE (+ compact education block) ---
+// --- EXPERIENCE (timeline + compact education block) ---
 export const ExperienceSection: React.FC<{ items: ExperienceItem[]; education?: ExperienceItem[] }> = ({
   items,
   education,
 }) => (
-  <Section id="experience" eyebrow="Experience" title={<>Where I&apos;ve <span className="gradient-text">shipped</span></>}>
-    <div className="flex flex-col gap-6">
-      {items.map((item) => (
-        <div key={item.role + item.org} className="glass-card rounded-2xl p-6 md:p-8 text-left">
-          <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1 mb-4">
-            <h3 className="geist-font text-lg md:text-xl font-medium text-card-foreground">
-              {item.role} · <span className="gradient-text">{item.org}</span>
-            </h3>
-            <span className="inter-font text-sm text-muted-foreground tabular-nums">{item.period}</span>
-          </div>
-          <ul className="inter-font text-sm text-muted-foreground leading-relaxed list-disc pl-5 space-y-2 mb-5">
-            {item.bullets.map((b) => (
-              <li key={b}>{b}</li>
-            ))}
-          </ul>
-          <div className="flex flex-wrap gap-2">
-            {item.tags.map((tag) => (
-              <span key={tag} className="skill-badge px-2 py-1 rounded text-xs text-muted-foreground">
-                {tag}
-              </span>
-            ))}
+  <Section
+    id="experience"
+    eyebrow="Experience"
+    title={<>Where I&apos;ve <span className="gradient-text">shipped</span></>}
+    subtitle="From full-stack engineering at a UK insurer to shipping GenAI systems on AWS Bedrock."
+  >
+    {/* timeline: a vertical rail with a logo chip (or dot) per role */}
+    <div className="relative flex flex-col gap-6 before:absolute before:left-[27px] before:top-4 before:bottom-4 before:w-px before:bg-white/10 md:before:left-[31px]">
+      {items.map((item, i) => (
+        <div key={item.role + item.org} className="relative pl-20 md:pl-24">
+          {item.logo ? (
+            <span
+              className={`absolute left-0 top-5 w-14 h-14 md:w-16 md:h-16 rounded-xl bg-white flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.4)] ring-1 ring-white/10 overflow-hidden ${
+                item.logoFill ? 'p-0' : 'p-1.5'
+              }`}
+            >
+              <img
+                src={item.logo}
+                alt={`${item.org} logo`}
+                className={`w-full h-full ${item.logoFill ? 'object-cover' : 'object-contain'}`}
+              />
+            </span>
+          ) : (
+            <span
+              className={`absolute left-[20px] top-6 w-[15px] h-[15px] rounded-full border-2 md:left-[22px] md:w-[19px] md:h-[19px] ${
+                i === 0 ? 'border-[#7d8cfa] bg-[#7d8cfa]/30' : 'border-white/25 bg-background'
+              }`}
+            />
+          )}
+          <div className="glass-card rounded-2xl p-6 md:p-8 text-left">
+            <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1 mb-4">
+              <h3 className="geist-font text-lg md:text-xl font-medium text-card-foreground">
+                {item.role} · <span className="gradient-text">{item.org}</span>
+              </h3>
+              <span className="inter-font text-sm text-muted-foreground tabular-nums shrink-0">{item.period}</span>
+            </div>
+            <ul className="inter-font text-sm text-muted-foreground leading-relaxed space-y-2 mb-5">
+              {item.bullets.map((b) => (
+                <li key={b} className="relative pl-4 before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-[#7d8cfa]/60">
+                  {b}
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-wrap gap-2">
+              {item.tags.map((tag) => (
+                <span key={tag} className="skill-badge px-2 py-1 rounded text-xs text-muted-foreground">
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       ))}
@@ -163,71 +225,317 @@ export const ExperienceSection: React.FC<{ items: ExperienceItem[]; education?: 
   </Section>
 )
 
-// --- FEATURED PROJECTS ---
-export const FeaturedProjectsSection: React.FC<{ projects: FeaturedProject[] }> = ({ projects }) => (
-  <Section id="featured" eyebrow="Projects" title={<>Things I&apos;ve <span className="gradient-text">built</span></>}>
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {projects.map((p) => (
-        <div
-          key={p.title}
-          className={`glass-card rounded-2xl text-left flex flex-col ${
-            p.featured ? 'lg:col-span-2 p-8 md:p-10' : 'p-6 md:p-8'
-          }`}
-        >
-          <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1 mb-3">
-            <h3 className={`geist-font font-medium text-card-foreground ${p.featured ? 'text-xl md:text-2xl' : 'text-lg'}`}>
-              {p.title}
-            </h3>
-            {p.meta && <span className="inter-font text-sm text-muted-foreground tabular-nums shrink-0">{p.meta}</span>}
+// --- STAGE EXPLORER (interactive pipeline walkthrough inside a project card) ---
+const StageExplorer: React.FC<{ stages: ProjectStage[] }> = ({ stages }) => {
+  const [active, setActive] = React.useState(0)
+  const s = stages[active] ?? stages[0]
+  const idx = (n: number) => String(n + 1).padStart(2, '0')
+  const go = (n: number) => setActive(Math.max(0, Math.min(stages.length - 1, n)))
+  const isFirst = active === 0
+  const isLast = active === stages.length - 1
+  return (
+    <div className="mb-6">
+      {/* stepper header — signals that the pipeline is interactive */}
+      <div className="flex items-center justify-between mb-3">
+        <span className="inter-font text-[10px] font-semibold tracking-[0.18em] uppercase text-muted-foreground">
+          Pipeline · {stages.length} stages
+        </span>
+        <span className="inter-font text-[10px] text-muted-foreground">Click a stage to explore →</span>
+      </div>
+      {/* pipeline stepper — connected stages, click to inspect */}
+      <div className="flex items-start overflow-x-auto pb-2 -mx-1 px-1">
+        {stages.map((stage, i) => {
+          const isActive = i === active
+          return (
+            <React.Fragment key={stage.label}>
+              {i > 0 && (
+                <div className="flex-1 min-w-[14px] h-9 flex items-center" aria-hidden="true">
+                  <div className={`w-full h-px ${i <= active ? 'bg-[#7d8cfa]/45' : 'bg-white/12'}`} />
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={() => setActive(i)}
+                aria-pressed={isActive}
+                aria-label={`Stage ${idx(i)}: ${stage.title}`}
+                className="group shrink-0 min-w-[58px] flex flex-col items-center gap-2 cursor-pointer"
+              >
+                <span
+                  className={`w-9 h-9 rounded-full flex items-center justify-center geist-font text-[13px] font-bold tabular-nums transition-all duration-200 ${
+                    isActive
+                      ? 'text-white bg-[linear-gradient(135deg,#67b7f7,#7d8cfa_55%,#9b7bff)] shadow-[0_0_0_4px_rgba(125,140,250,0.16)]'
+                      : 'text-muted-foreground border border-white/15 group-hover:border-white/40 group-hover:text-card-foreground'
+                  }`}
+                >
+                  {idx(i)}
+                </span>
+                <span
+                  className={`inter-font text-[10.5px] font-semibold tracking-[0.08em] uppercase whitespace-nowrap transition-colors ${
+                    isActive ? 'text-card-foreground' : 'text-muted-foreground group-hover:text-card-foreground'
+                  }`}
+                >
+                  {stage.label}
+                </span>
+              </button>
+            </React.Fragment>
+          )
+        })}
+      </div>
+
+      {/* active stage detail */}
+      <div className="glass-card rounded-xl p-5 md:p-6 mt-4">
+        <div key={active} className="project-detail-fade">
+          <div className={s.image ? 'grid md:grid-cols-[1fr_1fr] gap-6 lg:gap-10 items-center' : ''}>
+            <div className="min-w-0">
+              <div className="inter-font text-[10px] font-semibold tracking-[0.18em] uppercase text-[#7d8cfa] mb-2">
+                Step {idx(active)} · {s.label}
+              </div>
+              <h4 className="geist-font text-lg md:text-xl font-semibold text-card-foreground leading-tight">
+                {s.title}
+              </h4>
+              <p className="inter-font text-sm md:text-[15px] text-muted-foreground leading-relaxed mt-2.5">
+                {s.desc}
+              </p>
+            </div>
+
+            {s.image && (
+              <div className="min-w-0 mt-5 md:mt-0">
+                <div className="rounded-xl overflow-hidden border border-white/10 bg-black/30 shadow-[0_20px_60px_-25px_rgba(0,0,0,0.65)]">
+                  <div className="flex items-center gap-1.5 px-3 py-2.5 bg-white/[0.05] border-b border-white/10">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]/70" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]/70" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]/70" />
+                  </div>
+                  <img
+                    src={s.image}
+                    alt={`${s.title} — screenshot`}
+                    className="w-full h-auto block"
+                    loading="lazy"
+                  />
+                </div>
+                {s.imageCaption && (
+                  <p className="inter-font text-[11px] text-muted-foreground/70 mt-2.5 text-center leading-relaxed">
+                    {s.imageCaption}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
-          <p className="inter-font text-sm md:text-base text-muted-foreground leading-relaxed mb-4">{p.description}</p>
+
+          {s.insight && (
+            <div className="mt-5 rounded-lg border-l-2 border-[#7d8cfa]/50 bg-white/[0.025] pl-4 pr-4 md:pr-6 py-3.5">
+              <div className="inter-font text-[10px] font-semibold tracking-[0.14em] uppercase text-[#9b7bff] mb-1.5">
+                Trade-off
+              </div>
+              <p className="inter-font text-sm text-card-foreground/90 leading-relaxed">{s.insight}</p>
+            </div>
+          )}
+
+          {s.tags && s.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-4">
+              {s.tags.map((t) => (
+                <span key={t} className="skill-badge px-2.5 py-1 rounded-md text-[11px] text-muted-foreground font-mono">
+                  {t}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* prev / next controls — make step-through obvious to a first-time visitor */}
+        <div className="flex items-center justify-between gap-3 mt-5 pt-4 border-t border-white/10">
+          <span className="inter-font text-xs text-muted-foreground tabular-nums">
+            <span className="text-card-foreground font-semibold">{idx(active)}</span>
+            <span className="text-white/30"> / {idx(stages.length - 1)}</span>
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => go(active - 1)}
+              disabled={isFirst}
+              aria-label="Previous stage"
+              className="glass-button inline-flex items-center gap-1.5 pl-2.5 pr-3 py-1.5 rounded-lg text-xs font-medium text-foreground inter-font disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              <ChevronLeft className="w-4 h-4" /> Prev
+            </button>
+            <button
+              type="button"
+              onClick={() => go(active + 1)}
+              disabled={isLast}
+              aria-label="Next stage"
+              className="primary-button inline-flex items-center gap-1.5 pl-3 pr-2.5 py-1.5 rounded-lg text-xs font-medium text-foreground inter-font disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              Next <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// --- FEATURED PROJECTS (interactive master-detail) ---
+export const FeaturedProjectsSection: React.FC<{ projects: FeaturedProject[] }> = ({ projects }) => {
+  const [active, setActive] = React.useState(0)
+  const p = projects[active] ?? projects[0]
+  return (
+    <Section
+      id="featured"
+      eyebrow="Projects"
+      title={<>Things I&apos;ve <span className="gradient-text">built</span></>}
+      subtitle="Production GenAI systems, evaluated against real metrics — plus a few things I built for the love of it."
+    >
+      <div className="grid lg:grid-cols-[340px_minmax(0,1fr)] gap-5 md:gap-6">
+        {/* LEFT — project selector */}
+        <div className="flex lg:flex-col gap-3 overflow-x-auto lg:overflow-visible -mx-6 px-6 lg:mx-0 lg:px-0 pb-1 lg:pb-0">
+          {projects.map((proj, i) => {
+            const isActive = i === active
+            return (
+              <button
+                key={proj.title}
+                type="button"
+                onClick={() => setActive(i)}
+                aria-pressed={isActive}
+                className={`shrink-0 w-[260px] lg:w-full text-left rounded-2xl p-4 md:p-5 border transition-all duration-200 cursor-pointer ${
+                  isActive
+                    ? 'glass-card border-[#7d8cfa]/50 shadow-[0_8px_30px_rgba(125,140,250,0.15)]'
+                    : 'border-white/10 hover:border-white/25 hover:bg-white/[0.03]'
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <span
+                    className={`inter-font text-xs font-semibold tabular-nums pt-0.5 ${
+                      isActive ? 'text-[#7d8cfa]' : 'text-muted-foreground'
+                    }`}
+                  >
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <div className="min-w-0">
+                    <div
+                      className={`geist-font text-sm font-medium leading-snug ${
+                        isActive ? 'text-card-foreground' : 'text-muted-foreground'
+                      }`}
+                    >
+                      {proj.navTitle ?? proj.title}
+                    </div>
+                    {proj.meta && <div className="inter-font text-xs text-muted-foreground mt-1">{proj.meta}</div>}
+                  </div>
+                </div>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* RIGHT — active project detail */}
+        <div key={active} className="glass-card rounded-2xl p-6 md:p-8 flex flex-col project-detail-fade">
+          {/* media zone — hidden when an interactive stage explorer replaces it */}
+          {!p.stages && (
+            <div className="relative rounded-xl overflow-hidden mb-6 aspect-[16/7] project-image flex items-center justify-center">
+              {p.image ? (
+                <img src={p.image} alt={p.title} className="w-full h-full object-cover" />
+              ) : (
+                <>
+                  <div className="text-white/15 [&>svg]:w-16 [&>svg]:h-16 md:[&>svg]:w-20 md:[&>svg]:h-20">
+                    {p.icon ?? <Award className="w-16 h-16" />}
+                  </div>
+                  {p.meta && (
+                    <span className="absolute bottom-3 right-4 inter-font text-[11px] font-semibold tracking-[0.15em] uppercase text-white/30">
+                      {p.meta}
+                    </span>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+
+          <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1 mb-3">
+            <h3 className="geist-font text-xl md:text-2xl font-semibold text-card-foreground">{p.title}</h3>
+            {p.meta && (
+              <span className="inter-font text-xs font-semibold tracking-[0.15em] uppercase gradient-text shrink-0">
+                {p.meta}
+              </span>
+            )}
+          </div>
+
+          <p className="inter-font text-sm md:text-base text-muted-foreground leading-relaxed mb-5">{p.description}</p>
+
+          {p.stats && p.stats.length > 0 && (
+            <div className="flex flex-wrap gap-x-10 gap-y-4 py-5 mb-5 border-y border-white/10">
+              {p.stats.map((s) => (
+                <div key={s.label}>
+                  <div className="geist-font text-2xl md:text-3xl font-semibold gradient-text leading-none mb-1.5">
+                    {s.value}
+                  </div>
+                  <div className="inter-font text-xs text-muted-foreground">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {p.stages && p.stages.length > 0 && <StageExplorer stages={p.stages} />}
+
           {p.highlights && p.highlights.length > 0 && (
-            <ul className="inter-font text-sm text-muted-foreground leading-relaxed list-disc pl-5 space-y-2 mb-5">
+            <ul className="inter-font text-sm text-muted-foreground leading-relaxed space-y-2 mb-6">
               {p.highlights.map((h) => (
-                <li key={h}>{h}</li>
+                <li
+                  key={h}
+                  className="relative pl-4 before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-[#7d8cfa]/60"
+                >
+                  {h}
+                </li>
               ))}
             </ul>
           )}
-          <div className="flex flex-wrap gap-2 mb-5 mt-auto">
-            {p.tags.map((tag) => (
-              <span key={tag} className="skill-badge px-2 py-1 rounded text-xs text-muted-foreground">
-                {tag}
-              </span>
-            ))}
-          </div>
+
+          {/* global tag row — omitted when the stage explorer already surfaces the stack per step */}
+          {!p.stages && (
+            <div className="flex flex-wrap gap-2 mb-6 mt-auto">
+              {p.tags.map((tag) => (
+                <span key={tag} className="skill-badge px-3 py-1.5 rounded-lg text-xs text-muted-foreground">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
           {(p.repoUrl || p.demoUrl) && (
-            <div className="flex gap-3">
-              {p.repoUrl && (
-                <a
-                  href={p.repoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="glass-button inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-foreground inter-font"
-                >
-                  <Github className="w-3.5 h-3.5" /> Code
-                </a>
-              )}
+            <div className="flex flex-wrap gap-3">
               {p.demoUrl && (
                 <a
                   href={p.demoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="glass-button inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-foreground inter-font"
+                  className="primary-button inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-foreground inter-font"
                 >
-                  <ExternalLink className="w-3.5 h-3.5" /> Live
+                  <ExternalLink className="w-4 h-4" /> Live demo
+                </a>
+              )}
+              {p.repoUrl && (
+                <a
+                  href={p.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-button inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-foreground inter-font"
+                >
+                  <Github className="w-4 h-4" /> View code
                 </a>
               )}
             </div>
           )}
         </div>
-      ))}
-    </div>
-  </Section>
-)
+      </div>
+    </Section>
+  )
+}
 
 // --- SKILLS ---
 export const SkillsSection: React.FC<{ groups: SkillGroup[] }> = ({ groups }) => (
-  <Section id="stack" eyebrow="Skills" title={<>Tools I <span className="gradient-text">reach for</span></>}>
+  <Section
+    id="stack"
+    eyebrow="Skills"
+    title={<>Tools I <span className="gradient-text">reach for</span></>}
+    subtitle="The languages, frameworks, and GenAI tooling I use to take ideas from prototype to shipped."
+  >
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {groups.map((g) => (
         <div key={g.title} className="glass-card rounded-2xl p-6 text-left">
@@ -247,7 +555,12 @@ export const SkillsSection: React.FC<{ groups: SkillGroup[] }> = ({ groups }) =>
 
 // --- CERTIFICATIONS ---
 export const CertsSection: React.FC<{ certs: Cert[] }> = ({ certs }) => (
-  <Section id="certs" eyebrow="Certifications" title={<>Credentials that <span className="gradient-text">back it up</span></>}>
+  <Section
+    id="certs"
+    eyebrow="Certifications"
+    title={<>Credentials that <span className="gradient-text">back it up</span></>}
+    subtitle="Vendor certifications — each one links to its verifiable badge."
+  >
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {certs.map((c) => {
         const inner = (
@@ -315,7 +628,12 @@ export const WritingSection: React.FC<{ articles: Article[] }> = ({ articles }) 
 const tilts = ['-rotate-2', 'rotate-1', '-rotate-1', 'rotate-2']
 
 export const MomentsSection: React.FC<{ moments: Moment[] }> = ({ moments }) => (
-  <Section id="moments" eyebrow="Moments" title={<>Beyond the <span className="gradient-text">commits</span></>}>
+  <Section
+    id="moments"
+    eyebrow="Moments"
+    title={<>Beyond the <span className="gradient-text">commits</span></>}
+    subtitle="A few moments from the journey — click through to the story behind each."
+  >
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
       {moments.map((m, i) => {
         const card = (

@@ -146,6 +146,21 @@ body {
   border-color: rgba(125, 140, 250, 0.35);
 }
 
+/* ============ project detail panel: fade+rise when switching tabs ============ */
+@keyframes projectFade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.project-detail-fade {
+  animation: projectFade 0.28s ease-out;
+}
+
 /* ============ float animation (from component spec) ============ */
 @keyframes float {
   0%,
