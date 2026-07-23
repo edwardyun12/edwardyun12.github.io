@@ -44,8 +44,14 @@ const portfolioData: PortfolioPageProps = {
     titleLine1: 'GenAI Software Engineer,',
     titleLine2Gradient: 'Building production-ready AI systems',
     subtitle:
-      'Chanyeong Yun — built RAG and LLM-evaluation pipelines on AWS Bedrock at Bespin Global. Previously a software engineer at Vitality, one of the UK’s largest health & life insurers. Final-year Software Engineering student at Bournemouth University, graduating June 2027 and looking for my next role building AI-powered software.',
-  },
+      """I’m a GenAI Software Engineer passionate about building reliable AI systems that solve real-world problems.
+
+At Bespin Global, a leading cloud and AI consultancy and AWS Premier Tier Services Partner, I developed enterprise-grade RAG systems on AWS Bedrock, designed ontology-driven retrieval architectures for insurance knowledge using Palantir Ontology, and built evaluation pipelines to improve the accuracy and reliability of AI applications.
+
+Previously, I worked as a Software Engineer at Vitality, one of the UK’s leading health and life insurers, where I gained experience building scalable software solutions in a regulated industry.
+
+I’m currently completing my BSc in Software Engineering at Bournemouth University (graduating June 2027) and am seeking opportunities to build impactful AI-powered software that bridges cutting-edge research with practical business applications.,
+"""  },
   ctaButtons: {
     primary: {
       label: 'Explore My Work',
