@@ -8,6 +8,7 @@ import {
   WritingSection,
   MomentsSection,
   SiteFooter,
+  AwsIcon,
   type ExperienceItem,
   type FeaturedProject,
   type SkillGroup,
@@ -52,9 +53,9 @@ const portfolioData: PortfolioPageProps = {
       alt: 'Chanyeong at AWS Student Community Day, Seoul',
     },
     imageCaption: {
-      icon: 'a',
+      icon: <AwsIcon className="w-5 h-5 text-white" />,
       title: 'AWS Student Community Day',
-      sub: 'Invited attendee · Seoul 2024',
+      sub: 'Invited to AWS Student Community Day Seoul 2026',
     },
   },
   ctaButtons: {
@@ -89,7 +90,7 @@ const experience: ExperienceItem[] = [
     period: '2026.06 — 2026.07',
     logo: '/logos/bespin.webp',
     bullets: [
-      'Architected and built a vector-RAG system over enterprise insurance documents on AWS Bedrock, engineering the pipeline so a lightweight open-weight model (Qwen 3.5-35B-A3B) held 94% answer accuracy — within a point of the Sonnet 4.6 baseline, while cutting a daily inference bill of thousands of dollars to a fraction.',
+      'Architected and built a vector-RAG system over enterprise insurance documents on AWS Bedrock, engineering the pipeline so a lightweight open-weight model (Qwen 3.5-35B-A3B) held 94% answer accuracy — within a point of the Sonnet 4.6 baseline, while replacing a $250/day pay-per-call API bill with self-hosted, fixed-cost GPU inference.',
       'Built an LLM-based customer-question classification pipeline (Claude Haiku on Bedrock) across 21 business domains, reaching 93.24% accuracy through evaluation-driven prompt design and a two-stage guideline-generation architecture.',
       'Owned evaluation and cost analysis for GenAI services — golden-set accuracy tracking, RAGAS metrics, and region/latency/cost trade-off decisions for Bedrock deployments.',
     ],
@@ -142,12 +143,11 @@ const featuredProjects: FeaturedProject[] = [
     meta: 'Bespin Global · 2026',
     icon: <Database strokeWidth={1.25} />,
     stats: [
-      { value: '94%', label: 'Qwen SLM answer accuracy' },
-      { value: '−1pt', label: 'vs 95% Sonnet 4.6 baseline' },
-      { value: '$1000s/day', label: 'inference cost cut' },
+      { value: '95%→94%', label: 'Sonnet 4.6 → Qwen SLM accuracy' },
+      { value: '$250/day→$0', label: 'Sonnet API cost avoided' },
     ],
     description:
-      'Insurance domain-specific Q&A RAG system, designed and built end-to-end for a global insurer’s policy documents — a FastAPI backend with a React front end. Started from a 95% accuracy baseline on AWS Bedrock’s Sonnet 4.6, then, to optimise cost, moved to a lightweight SLM (Qwen 3.5-35B-A3B) and pushed answer accuracy back to 94% in three weeks — cutting a daily inference bill of thousands of dollars to a fraction.',
+      'Insurance domain-specific Q&A RAG system, designed and built end-to-end for a global insurer’s policy documents — a FastAPI backend with a React front end. Started from a 95% accuracy baseline on AWS Bedrock’s Sonnet 4.6, then, to optimise cost, moved to a lightweight SLM (Qwen 3.5-35B-A3B) and pushed answer accuracy back to 94% in three weeks — replacing a $250/day pay-per-call API bill with self-hosted, fixed-cost GPU inference.',
     stages: [
       {
         label: 'Ingest',
@@ -203,20 +203,71 @@ const featuredProjects: FeaturedProject[] = [
       {
         label: 'Index',
         title: 'Embed & store',
-        desc: 'Titan Embeddings v2 written into Weaviate and ChromaDB, indexed for fast hybrid retrieval.',
-        tags: ['Titan v2', 'Weaviate', 'ChromaDB'],
+        desc: 'Titan Embeddings v2 written into Weaviate and ChromaDB, indexed for fast hybrid retrieval — 17,523 chunks across procedures, sections, and table-level splits.',
+        insightSteps: [
+          {
+            label: 'The visualiser',
+            text: 'Built a live semantic search over the Weaviate collection — a query box that hits the real VectorDB, returns the top-5 nearest chunks, and plots every stored vector on a PCA-projected 2D scatter, colour-coded by chunk type.',
+          },
+          {
+            label: 'What it showed',
+            text: 'table_row chunks (15,098 of the 17,523) dominate the space and cluster into distinct arms, while procedure, section, and table_block chunks sit apart — confirming the hybrid chunker was producing semantically distinct groups rather than a homogeneous blob.',
+          },
+          {
+            label: 'Why it mattered',
+            text: 'Seeing the embedding space directly made it possible to sanity-check retrieval quality before ever running an end-to-end eval — clusters that should be semantically close but landed far apart flagged chunking or embedding issues early.',
+          },
+        ],
+        image: '/projects/embedding-stage.png',
+        imageLabel: 'embedding explorer · live Weaviate',
+        imageCaption: '17,523 vectors from the live Weaviate collection, projected to 2D with PCA — searchable in real time against the actual VectorDB.',
+        tags: ['Titan v2', 'Weaviate', 'ChromaDB', 'PCA Projection'],
       },
       {
         label: 'Retrieve',
         title: 'Hybrid + rerank',
         desc: 'BM25 — tuned at the tokeniser level (Kagome KR, trigram) for Korean policy terms — fused with vector search, then sharpened by LLM-based reranking.',
-        tags: ['BM25', 'Vector', 'LLM rerank'],
+        insightSteps: [
+          {
+            label: 'The tuning console',
+            text: 'Built a UI to re-run hybrid search on a live query with the alpha (keyword-vs-vector) balance and per-field BM25 weights — content, search_text, title, document_name — all exposed as sliders, re-searching against the real Weaviate collection on every change.',
+          },
+          {
+            label: 'What it caught',
+            text: 'Watching the returned chunks shift in real time as weights moved made it obvious when a query was missing its answer because document_name or title was overpowering content, or because alpha was skewed too far toward keyword match on queries that needed semantic recall.',
+          },
+          {
+            label: 'The result',
+            text: 'Manually walking the weight space against real queries — instead of guessing at defaults — settled on field weights and an alpha that measurably improved which chunks got retrieved, feeding directly into the accuracy gain downstream.',
+          },
+        ],
+        image: '/projects/retrieval-stage.png',
+        imageLabel: 'hybrid search tuner · live Weaviate',
+        imageCaption: 'Alpha and per-field BM25 weights tuned live against the real collection — re-search on every change to inspect which chunks come back.',
+        tags: ['BM25', 'Vector', 'LLM rerank', 'Weight Tuning'],
       },
       {
         label: 'Generate',
         title: 'SLM answer synthesis',
         desc: 'Qwen 3.5-35B-A3B answers at 94% — within a point of the Sonnet 4.6 baseline, at a fraction of the cost. A strict JSON schema and citation grounding force every answer to cite its source chunk.',
-        tags: ['Qwen 3.5-35B-A3B', 'JSON schema', 'Citations'],
+        insightSteps: [
+          {
+            label: 'The chatbot',
+            text: 'Built a native chat interface right into the pipeline visualiser — ask a question, watch the retriever pull chunks from the VectorDB, then the LLM answers with citations. Top K, conversation memory, and multi-hop reasoning are all exposed and adjustable per query.',
+          },
+          {
+            label: 'What it enabled',
+            text: 'Expanding an answer’s cited sources shows the exact chunks it was grounded in, end to end — turning every failed or shaky answer into a debuggable trace back through retrieval and chunking instead of a black box.',
+          },
+          {
+            label: 'The result',
+            text: 'Running real policy questions through the full pipeline this way — not just isolated eval scores — surfaced synthesis-level issues (hallucinated citations, multi-hop questions needing more than Top K=5) that were fixed before they showed up in the accuracy numbers.',
+          },
+        ],
+        image: '/projects/chatbot-stage.png',
+        imageLabel: 'RAG chatbot · live pipeline',
+        imageCaption: 'End-to-end chat over the indexed insurance documents — Top K, memory, and multi-hop all adjustable, every answer citation-grounded.',
+        tags: ['Qwen 3.5-35B-A3B', 'JSON schema', 'Citations', 'Multi-hop'],
       },
     ],
     tags: ['Python', 'FastAPI', 'React', 'AWS Bedrock', 'LangChain', 'Weaviate', 'ChromaDB', 'Prompt Engineering', 'RAGAS'],
