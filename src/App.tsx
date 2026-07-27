@@ -16,7 +16,7 @@ import {
   type Article,
   type Moment,
 } from '@/components/sections'
-import { Database, Layers, Network, Mic, ScanSearch, Trophy } from 'lucide-react'
+import { Database, Layers, Mic, ScanSearch, Trophy } from 'lucide-react'
 
 const GITHUB_URL = 'https://github.com/edwardyun12'
 const LINKEDIN_URL = 'https://uk.linkedin.com/in/chanyeongyun'
@@ -43,10 +43,10 @@ const portfolioData: PortfolioPageProps = {
     alt: 'Chanyeong Yun',
   },
   hero: {
-    badge: 'Open to GenAI & ML roles',
-    titleLine1: 'GenAI Software Engineer,',
+    badge: 'Open to AI & Software Engineer roles',
+    titleLine1: 'AI Software Engineer,',
     titleLine2Gradient: 'building production-ready AI',
-    subtitle: 'I design reliable AI systems that solve real-world problems — from retrieval pipelines to LLM-powered products in production.',
+    subtitle: 'I design reliable AI systems that solve real-world problems — specializing in RAG architectures, LLM evaluation, and enterprise AI pipelines.',
     tags: ['Python', 'LangChain', 'AWS Bedrock', 'RAG'],
     image: {
       src: '/photos/aws.webp',
@@ -78,23 +78,32 @@ const portfolioData: PortfolioPageProps = {
 }
 
 const summary: string[] = [
-  'At Bespin Global, a leading cloud and AI consultancy and AWS Premier Tier Services Partner, I developed enterprise-grade RAG systems on AWS Bedrock, designed ontology-driven retrieval architectures for insurance knowledge using Palantir Ontology, and built evaluation pipelines to improve the accuracy and reliability of AI applications.',
+  'At Bespin Global, a leading cloud and AI consultancy and AWS Premier Tier Services Partner in South Korea, I developed enterprise-grade RAG systems on AWS Bedrock, designed ontology-driven retrieval architectures for insurance knowledge using Palantir Ontology, and built evaluation pipelines to improve the accuracy and reliability of AI applications.',
   'Previously, I worked as a Software Engineer at Vitality, one of the UK’s leading health and life insurers, where I gained experience building scalable software solutions in a regulated industry.',
   'I’m currently completing my BSc in Software Engineering at Bournemouth University (graduating June 2027) and am seeking opportunities to build impactful AI-powered software that bridges cutting-edge research with practical business applications.',
 ]
 
+const summaryHighlights = ['Bespin Global', 'AWS Bedrock', 'Palantir Ontology', 'Vitality', 'Bournemouth University']
+
+const summaryFacts = [
+  { title: 'Based in', value: 'Bournemouth, UK' },
+  { title: 'Education', value: 'BSc Software Engineering, expected June 2027' },
+  { title: 'Status', value: 'Open to AI & Software Engineer roles' },
+]
+
 const experience: ExperienceItem[] = [
   {
-    role: 'GenAI Software Engineer',
+    role: 'AI Software Engineer (Intern)',
     org: 'Bespin Global',
     period: '2026.06 — 2026.07',
     logo: '/logos/bespin.webp',
     bullets: [
       'Architected and built a vector-RAG system over enterprise insurance documents on AWS Bedrock, engineering the pipeline so a lightweight open-weight model (Qwen 3.5-35B-A3B) held 94% answer accuracy — within a point of the Sonnet 4.6 baseline, while replacing a $250/day pay-per-call API bill with self-hosted, fixed-cost GPU inference.',
+      'Identified where pure vector similarity fell short — multi-hop, relationship-dependent questions the VectorDB kept missing — and began designing a Palantir Ontology knowledge layer to encode insurance domain objects and their schema-defined relationships explicitly, aiming to let retrieval traverse defined links rather than rely on embedding distance alone.',
       'Built an LLM-based customer-question classification pipeline (Claude Haiku on Bedrock) across 21 business domains, reaching 93.24% accuracy through evaluation-driven prompt design and a two-stage guideline-generation architecture.',
       'Owned evaluation and cost analysis for GenAI services — golden-set accuracy tracking, RAGAS metrics, and region/latency/cost trade-off decisions for Bedrock deployments.',
     ],
-    tags: ['Python', 'RAG', 'LLM Evaluation', 'Prompt Engineering', 'AWS Bedrock', 'Vector Search'],
+    tags: ['Python', 'RAG', 'LLM Evaluation', 'Prompt Engineering', 'AWS Bedrock', 'Vector Search', 'Palantir Ontology'],
   },
   {
     role: 'Tactical Systems & Communications Squad Leader, Sergeant',
@@ -147,7 +156,7 @@ const featuredProjects: FeaturedProject[] = [
       { value: '$250/day→$0', label: 'Sonnet API cost avoided' },
     ],
     description:
-      'Insurance domain-specific Q&A RAG system, designed and built end-to-end for a global insurer’s policy documents — a FastAPI backend with a React front end. Started from a 95% accuracy baseline on AWS Bedrock’s Sonnet 4.6, then, to optimise cost, moved to a lightweight SLM (Qwen 3.5-35B-A3B) and pushed answer accuracy back to 94% in three weeks — replacing a $250/day pay-per-call API bill with self-hosted, fixed-cost GPU inference.',
+      'Insurance domain-specific Q&A RAG system, designed and built end-to-end for a global insurer’s policy documents — a FastAPI backend with a React front end. Accuracy measured against a golden set built by insurance domain experts. Started from a 95% accuracy baseline on AWS Bedrock’s Sonnet 4.6, then, to optimise cost, moved to a lightweight SLM (Qwen 3.5-35B-A3B) and pushed answer accuracy back to 94% in three weeks — replacing a $250/day pay-per-call API bill with self-hosted, fixed-cost GPU inference.',
     stages: [
       {
         label: 'Ingest',
@@ -180,11 +189,11 @@ const featuredProjects: FeaturedProject[] = [
       {
         label: 'Chunk',
         title: 'Hybrid chunking',
-        desc: 'A custom chunker splits each parsed page along its document structure — sections, procedures, and whole/block/row-level tables — so table integrity and heading hierarchy survive the split, paired with LangChain’s recursive splitter for plain prose under a hard token ceiling.',
+        desc: 'A custom hybrid chunker splits each parsed page along its document structure — sections, procedures, and whole/block/row-level tables — so table integrity and heading hierarchy survive the split. For plain prose, it borrows the idea behind recursive character splitting — cutting along token boundaries while preserving the hierarchical structure — all under a hard token ceiling.',
         insightSteps: [
           {
             label: 'The simulator',
-            text: 'Pick a parsed Markdown document and watch rag_chunker.py build chunks live — source on the left, chunked output on the right — with search_text inspectable per chunk.',
+            text: 'Pick a parsed Markdown document and watch the chunker build chunks live — source on the left, chunked output on the right, each chunk’s type and boundaries inspectable.',
           },
           {
             label: 'What it caught',
@@ -192,30 +201,30 @@ const featuredProjects: FeaturedProject[] = [
           },
           {
             label: 'The result',
-            text: 'Structure-aware splitting kept sections, procedures, and tables intact while the recursive splitter handled prose — all under a fixed token budget.',
+            text: 'Structure-aware splitting kept sections, procedures, and tables intact, while the token-based half of the hybrid — built on the recursive-splitting idea — handled prose, all under a fixed token budget.',
           },
         ],
         image: '/projects/chunking-stage.png',
-        imageLabel: 'rag_chunker · simulator',
-        imageCaption: 'Same parsed document, structure-aware chunks on the right — search_text inspectable per chunk.',
-        tags: ['Table-aware', 'LangChain', 'Token budgeting', 'Pipeline Simulator'],
+        imageLabel: 'chunking · simulator',
+        imageCaption: 'Same parsed document, structure-aware chunks on the right — each chunk’s type and boundaries inspectable.',
+        tags: ['Table-aware', 'Hybrid Chunking', 'Token budgeting', 'Pipeline Simulator'],
       },
       {
         label: 'Index',
         title: 'Embed & store',
-        desc: 'Titan Embeddings v2 written into Weaviate and ChromaDB, indexed for fast hybrid retrieval — 17,523 chunks across procedures, sections, and table-level splits.',
+        desc: 'AWS Bedrock’s Titan Embeddings v2 embeds each parsed chunk, written into both Weaviate and ChromaDB — Weaviate chosen for its built-in BM25 + dense vector hybrid search, giving keyword and semantic retrieval out of the box. 17,523 chunks indexed across procedures, sections, and table-level splits.',
         insightSteps: [
           {
             label: 'The visualiser',
-            text: 'Built a live semantic search over the Weaviate collection — a query box that hits the real VectorDB, returns the top-5 nearest chunks, and plots every stored vector on a PCA-projected 2D scatter, colour-coded by chunk type.',
+            text: 'Built a live semantic search over the Weaviate collection — a query box that hits the real VectorDB with pure similarity search (no reranking, no multi-hop), returns the top-5 nearest chunks, and plots every stored vector on a PCA-projected 2D scatter, colour-coded by chunk type.',
           },
           {
             label: 'What it showed',
-            text: 'table_row chunks (15,098 of the 17,523) dominate the space and cluster into distinct arms, while procedure, section, and table_block chunks sit apart — confirming the hybrid chunker was producing semantically distinct groups rather than a homogeneous blob.',
+            text: 'Confirmed the previous stage’s chunks were actually landing correctly in the VectorDB — table_row chunks (15,098 of 17,523) formed their own tight cluster, separate from procedure, section, and table_block chunks, instead of one blurred mass.',
           },
           {
             label: 'Why it mattered',
-            text: 'Seeing the embedding space directly made it possible to sanity-check retrieval quality before ever running an end-to-end eval — clusters that should be semantically close but landed far apart flagged chunking or embedding issues early.',
+            text: 'That gave a clean baseline: if pure similarity search here doesn’t surface the right chunk, the problem is upstream in chunking or embedding; if it does surface correctly here but the chatbot still gets it wrong, the problem is downstream in retrieval.',
           },
         ],
         image: '/projects/embedding-stage.png',
@@ -234,7 +243,7 @@ const featuredProjects: FeaturedProject[] = [
           },
           {
             label: 'What it caught',
-            text: 'Watching the returned chunks shift in real time as weights moved made it obvious when a query was missing its answer because document_name or title was overpowering content, or because alpha was skewed too far toward keyword match on queries that needed semantic recall.',
+            text: 'Instead of guessing that a higher BM25 weight would just mean more keyword matching, I moved each weight against real queries and watched the results actually change — that’s how I caught document_name or title overpowering content.',
           },
           {
             label: 'The result',
@@ -273,32 +282,24 @@ const featuredProjects: FeaturedProject[] = [
     tags: ['Python', 'FastAPI', 'React', 'AWS Bedrock', 'LangChain', 'Weaviate', 'ChromaDB', 'Prompt Engineering', 'RAGAS'],
   },
   {
-    title: 'Customer Query Classification — 93.24% across 21 domains',
-    navTitle: 'Customer Query Classification',
+    title: 'Customer Query Classification System — 93.24% across 21 domains',
+    navTitle: 'Customer Query Classification System',
     meta: 'Bespin Global · 2026',
     icon: <Layers strokeWidth={1.25} />,
+    image: '/projects/classification-pipeline.png',
     stats: [
       { value: '93.24%', label: 'accuracy' },
       { value: '0.94', label: 'Macro F1' },
       { value: '21', label: 'business domains' },
     ],
     description:
-      'LLM-based pipeline that automatically routes call-centre customer questions to the correct business domain for a large insurance provider. Built with Claude Haiku on AWS Bedrock, reaching 93.24% accuracy (Macro F1 0.9432) on a 695-question evaluation set — 14 of 21 domains hit 100%.',
+      'LLM-based classification system for a large insurance provider’s customer questions. Prompts run against Claude Haiku on AWS Bedrock were tested and iterated against a 695-question golden set with verified domain answers until predictions matched 93.24% of the time (Macro F1 0.9432) — the resulting pipeline is what classifies incoming customer questions going forward, with 14 of 21 domains hitting 100%.',
     highlights: [
       'Two-stage architecture: an LLM first mines labelled examples to auto-generate per-domain classification guidelines (an "ontologist" persona prompt), then a second pass classifies new questions in parallel batches against those guidelines.',
       'A hard-boundary rule matrix injected ahead of the model’s own judgement to eliminate recurring confusions between frequently-mixed domains.',
       'Evaluation-driven iteration: per-class precision/recall (not just headline accuracy) pinpointed exactly which domains needed sharper rules, with an auto-generated error notebook driving each round of prompt fixes.',
     ],
     tags: ['Python', 'AWS Bedrock', 'Claude Haiku', 'Prompt Engineering', 'Evaluation'],
-  },
-  {
-    title: 'GraphRAG for Insurance — a knowledge-graph prototype',
-    navTitle: 'GraphRAG for Insurance',
-    meta: 'Bespin Global · 2026 (R&D spike)',
-    icon: <Network strokeWidth={1.25} />,
-    description:
-      'A proof-of-concept exploring where knowledge graphs outperform vector search on domain documents. Built a Neo4j sandbox modelling how the pipeline’s hardest cases for VectorRAG — complex compound medical terms that embeddings struggle to disambiguate — could instead be captured as explicit graph relationships, testing where a GraphRAG approach earns its added complexity over plain vector retrieval.',
-    tags: ['Neo4j', 'GraphRAG', 'Knowledge Graph', 'Ontology', 'Cypher'],
   },
   {
     title: 'Nexus — a voice-first AI agent that runs my job hunt',
@@ -335,13 +336,16 @@ const featuredProjects: FeaturedProject[] = [
     repoUrl: 'https://github.com/edwardyun12/cv-job-matcher',
   },
   {
-    title: '1st Place — JPMorgan Computing in Business Week',
+    title: 'JPMorgan Chase’s Computing in Business Week',
     navTitle: '1st Place — JPMorgan',
+    badge: '1st Place',
+    titleAccent: 'JPMorgan Chase',
     meta: 'Bournemouth University · 2022',
     icon: <Trophy strokeWidth={1.25} />,
-    stats: [{ value: '1st', label: 'of all competing teams' }],
+    image: '/photos/bu-team.webp',
+    imagePosition: 'center 75%',
     description:
-      'Won first place in JPMorgan Chase’s Computing in Business Week competition. Translated stakeholder requirements into technical specifications and shipped a full-stack solution — Python/Flask backend with a responsive front end — earning an invitation to a two-day workshop at JPMorgan’s Bournemouth office.',
+      'Won first place in JPMorgan Chase’s Computing in Business Week competition. Translated JPMorgan’s stakeholder requirements into technical specifications and shipped a full-stack solution — Python/Flask backend with a responsive front end — earning an invitation to a two-day workshop at JPMorgan’s Bournemouth office.',
     tags: ['Python', 'Flask', 'Full-stack', 'Requirements Analysis'],
   },
 ]
@@ -400,19 +404,22 @@ const certs: Cert[] = [
   },
 ]
 
-// TODO: 실제 글로 교체하세요 — LinkedIn 아티클, 블로그, Medium 등 링크.
+// TODO: writing-drafts/ 아래 글을 Medium/dev.to 등에 게시한 뒤, 아래 url을 실제 게시 링크로 교체하세요.
+// 분류 파이프라인 글(writing-drafts/llm-classification-93-percent.md)은 회사 확인 전까지 보류 — 승인 후 여기에 다시 추가.
 const articles: Article[] = [
   {
-    title: 'Article title goes here',
-    summary: 'One-line summary of what the reader will learn — e.g. lessons from building an MCP server in production.',
-    date: '2026-01',
-    url: 'https://example.com/article',
+    title: 'PDF Parsing Is the Hidden Bottleneck in Your RAG Pipeline',
+    summary:
+      'A hands-on benchmark of PDF parsing libraries for RAG over table-heavy Korean documents — and why parsing, not the LLM, is responsible for most wrong answers.',
+    date: '2026-07',
+    url: 'https://dev.to/edwardyun/pdf-parsing-is-the-hidden-bottleneck-in-your-rag-pipeline-37gn',
   },
   {
-    title: 'Another article title',
-    summary: 'Short technical write-ups are a huge differentiator at graduate level — even two posts are enough.',
-    date: '2025-11',
-    url: 'https://example.com/article',
+    title: '31.8x Speedup by Changing One File: Async Embedding Calls on AWS Bedrock',
+    summary:
+      'The embedding stage of a RAG ingestion pipeline took 50 seconds per document. One file changed, no infrastructure touched — 1.56 seconds.',
+    date: '2026-07',
+    url: 'https://dev.to/edwardyun/318x-speedup-by-changing-one-file-async-embedding-calls-on-aws-bedrock-4l61',
   },
 ]
 
@@ -430,7 +437,7 @@ const moments: Moment[] = [
   {
     src: '/photos/bespin.webp',
     alt: 'Chanyeong at the Bespin Global office',
-    caption: 'First day at Bespin Global as a GenAI Software Engineer',
+    caption: 'First day at Bespin Global as an AI Software Engineer',
     sub: 'Seoul, South Korea · 2026',
     url: 'https://www.linkedin.com/feed/update/urn:li:activity:7467213468073463808/',
   },
@@ -463,7 +470,14 @@ function App() {
     <>
       <PortfolioPage {...portfolioData} />
       <div className="sections-bg">
-        <SummarySection paragraphs={summary} />
+        <SummarySection
+          paragraphs={summary}
+          highlights={summaryHighlights}
+          name="Chanyeong Yun"
+          role="AI Software Engineer"
+          photo={{ src: '/photos/bespin-summary.webp', alt: 'Chanyeong Yun at Bespin Global' }}
+          facts={summaryFacts}
+        />
         <FeaturedProjectsSection projects={featuredProjects} />
         <ExperienceSection items={experience} education={education} />
         <SkillsSection groups={skillGroups} />

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ExternalLink, Mail, Award, ArrowUpRight, Link2, Copy, Check, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ExternalLink, Mail, Award, ArrowUpRight, Link2, Copy, Check, ChevronLeft, ChevronRight, Trophy } from 'lucide-react'
 
 // lucide-react no longer ships brand icons — inline SVGs instead
 const Github: React.FC<{ className?: string }> = ({ className }) => (
@@ -52,6 +52,12 @@ export interface FeaturedProject {
   icon?: React.ReactNode
   /** 실제 스크린샷 경로 — 있으면 아이콘 대신 표시 */
   image?: string
+  /** image의 object-position (예: 'center 30%') — 크롭 위치 조정용, 기본값 center */
+  imagePosition?: string
+  /** 제목 위에 트로피 배지로 표시할 성과 (예: '1st Place') */
+  badge?: string
+  /** title 안에서 gradient-text로 강조할 부분 문자열 (예: 회사명) */
+  titleAccent?: string
   /** 핵심 지표 타일 (예: [{value:'96%', label:'golden-set accuracy'}]) */
   stats?: { value: string; label: string }[]
   /** 파이프라인 단계 탐색기 — 있으면 이미지 대신 인터랙티브 stage explorer가 표시됩니다 */
@@ -74,7 +80,7 @@ export interface ProjectStage {
   tags?: string[]
   /** 단계 근거를 보여주는 스크린샷 — 있으면 제목 아래 풀와이드 브라우저 프레임으로 표시됩니다 */
   image?: string
-  /** 브라우저 프레임 상단 바에 표시할 짧은 라벨 (예: 'rag_chunker · simulator') */
+  /** 브라우저 프레임 상단 바에 표시할 짧은 라벨 (예: 'chunking · simulator') */
   imageLabel?: string
   /** 스크린샷 아래 표시할 한 줄 캡션 */
   imageCaption?: string
@@ -106,6 +112,10 @@ export interface Moment {
   url?: string
   /** 링크 배지에 표시할 아이콘. 기본값은 'linkedin' */
   urlIcon?: 'linkedin' | 'link'
+}
+export interface SummaryFact {
+  title: string
+  value: string
 }
 export interface FooterData {
   name: string
@@ -143,17 +153,90 @@ const Section: React.FC<{
 )
 
 // --- PROFESSIONAL SUMMARY ---
-export const SummarySection: React.FC<{ paragraphs: string[] }> = ({ paragraphs }) => (
-  <Section id="summary" eyebrow="Summary" title={<>Professional <span className="gradient-text">summary</span></>}>
-    <div className="glass-card rounded-2xl p-6 md:p-8 flex flex-col gap-4 text-left max-w-3xl mx-auto">
-      {paragraphs.map((p) => (
-        <p key={p} className="inter-font text-sm md:text-base text-muted-foreground leading-relaxed">
-          {p}
-        </p>
-      ))}
-    </div>
-  </Section>
-)
+function highlightTerms(text: string, terms: string[]): React.ReactNode {
+  if (terms.length === 0) return text
+  const pattern = new RegExp(`(${terms.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g')
+  return text.split(pattern).map((part, i) =>
+    terms.includes(part) ? (
+      <span key={i} className="text-card-foreground font-semibold">
+        {part}
+      </span>
+    ) : (
+      <React.Fragment key={i}>{part}</React.Fragment>
+    )
+  )
+}
+
+export const SummarySection: React.FC<{
+  paragraphs: string[]
+  /** 문단 안에서 굵게 강조할 회사명·기술명 등 (예: ['Bespin Global', 'AWS Bedrock']) */
+  highlights?: string[]
+  name?: string
+  role?: string
+  photo?: { src: string; alt: string; position?: string }
+  /** 좌측 프로필 컬럼에 표시할 짧은 사실 목록 (위치, 학력, 상태 등) */
+  facts?: SummaryFact[]
+}> = ({ paragraphs, highlights = [], name, role, photo, facts }) => {
+  const [lead, ...rest] = paragraphs
+  return (
+    <Section id="summary" eyebrow="Summary" title={<>Professional <span className="gradient-text">summary</span></>}>
+      <div className="grid lg:grid-cols-[220px_minmax(0,1fr)] gap-8 lg:gap-16 max-w-4xl mx-auto items-start text-left">
+        {(name || photo || (facts && facts.length > 0)) && (
+          <div className="flex flex-col gap-5 lg:sticky lg:top-28">
+            {photo && (
+              <div className="w-full max-w-[220px] aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 bg-white/[0.02]">
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  className="w-full h-full object-cover"
+                  style={photo.position ? { objectPosition: photo.position } : undefined}
+                />
+              </div>
+            )}
+            {(name || role) && (
+              <div>
+                {name && <div className="geist-font text-lg font-semibold text-card-foreground">{name}</div>}
+                {role && <div className="inter-font text-sm text-muted-foreground mt-0.5">{role}</div>}
+              </div>
+            )}
+            {facts && facts.length > 0 && (
+              <>
+                <div className="divider" />
+                <div className="flex flex-col gap-4">
+                  {facts.map((f) => (
+                    <div key={f.title}>
+                      <div className="inter-font text-[10px] font-semibold tracking-[0.18em] uppercase text-muted-foreground mb-1">
+                        {f.title}
+                      </div>
+                      <div className="inter-font text-sm text-card-foreground">{f.value}</div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        <div className="flex flex-col gap-5">
+          {lead && (
+            <p className="inter-font text-base md:text-lg text-card-foreground leading-relaxed">
+              {highlightTerms(lead, highlights)}
+            </p>
+          )}
+          {rest.length > 0 && (
+            <div className="border-l-2 border-[#7d8cfa]/35 pl-5 flex flex-col gap-4">
+              {rest.map((p) => (
+                <p key={p} className="inter-font text-sm md:text-base text-muted-foreground leading-relaxed">
+                  {highlightTerms(p, highlights)}
+                </p>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </Section>
+  )
+}
 
 // --- EXPERIENCE (timeline + compact education block) ---
 export const ExperienceSection: React.FC<{ items: ExperienceItem[]; education?: ExperienceItem[] }> = ({
@@ -419,6 +502,19 @@ const StageExplorer: React.FC<{ stages: ProjectStage[] }> = ({ stages }) => {
   )
 }
 
+function renderAccentTitle(title: string, accent?: string) {
+  if (!accent) return title
+  const i = title.indexOf(accent)
+  if (i === -1) return title
+  return (
+    <>
+      {title.slice(0, i)}
+      <span className="gradient-text">{accent}</span>
+      {title.slice(i + accent.length)}
+    </>
+  )
+}
+
 // --- FEATURED PROJECTS (interactive master-detail) ---
 export const FeaturedProjectsSection: React.FC<{ projects: FeaturedProject[] }> = ({ projects }) => {
   const [active, setActive] = React.useState(0)
@@ -477,7 +573,12 @@ export const FeaturedProjectsSection: React.FC<{ projects: FeaturedProject[] }> 
           {!p.stages && (
             <div className="relative rounded-xl overflow-hidden mb-6 aspect-[16/7] project-image flex items-center justify-center">
               {p.image ? (
-                <img src={p.image} alt={p.title} className="w-full h-full object-cover" />
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  className="w-full h-full object-cover"
+                  style={p.imagePosition ? { objectPosition: p.imagePosition } : undefined}
+                />
               ) : (
                 <>
                   <div className="text-white/15 [&>svg]:w-16 [&>svg]:h-16 md:[&>svg]:w-20 md:[&>svg]:h-20">
@@ -494,7 +595,17 @@ export const FeaturedProjectsSection: React.FC<{ projects: FeaturedProject[] }> 
           )}
 
           <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1 mb-3">
-            <h3 className="geist-font text-xl md:text-2xl font-semibold text-card-foreground">{p.title}</h3>
+            <div>
+              {p.badge && (
+                <div className="primary-button inline-flex items-center gap-1.5 mb-2 px-3 py-1 rounded-full">
+                  <Trophy className="w-3.5 h-3.5 text-foreground" strokeWidth={2} />
+                  <span className="geist-font text-xs font-semibold tracking-wide text-foreground">{p.badge}</span>
+                </div>
+              )}
+              <h3 className="geist-font text-xl md:text-2xl font-semibold text-card-foreground">
+                {renderAccentTitle(p.title, p.titleAccent)}
+              </h3>
+            </div>
             {p.meta && (
               <span className="inter-font text-xs font-semibold tracking-[0.15em] uppercase gradient-text shrink-0">
                 {p.meta}
