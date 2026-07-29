@@ -25,7 +25,7 @@ const EMAIL = 'edward767976@gmail.com'
 const portfolioData: PortfolioPageProps = {
   logo: {
     initials: 'CY',
-    name: 'Chanyeong Yun',
+    name: 'Chanyeong (Edward) Yun',
   },
   navLinks: [
     { label: 'Projects', href: '#featured' },
@@ -40,14 +40,14 @@ const portfolioData: PortfolioPageProps = {
   },
   avatar: {
     src: '/photos/profile.webp',
-    alt: 'Chanyeong Yun',
+    alt: 'Chanyeong (Edward) Yun',
   },
   hero: {
     badge: 'Open to AI & Software Engineer roles',
-    titleLine1: 'AI Software Engineer,',
-    titleLine2Gradient: 'building production-ready AI',
-    subtitle: 'I design reliable AI systems that solve real-world problems — specializing in RAG architectures, LLM evaluation, and enterprise AI pipelines.',
-    tags: ['Python', 'LangChain', 'AWS Bedrock', 'RAG'],
+    titleLine1: 'Software Engineer,',
+    titleLine2Gradient: 'building backend systems & AI',
+    subtitle: 'I build reliable software — from production backend systems to AI pipelines — that solves real-world problems.',
+    tags: ['TypeScript', 'GraphQL', 'AWS Bedrock', 'RAG'],
     image: {
       src: '/photos/aws.webp',
       alt: 'Chanyeong at AWS Student Community Day, Seoul',
@@ -80,7 +80,7 @@ const portfolioData: PortfolioPageProps = {
 const summary: string[] = [
   'At Bespin Global, a leading cloud and AI consultancy and AWS Premier Tier Services Partner in South Korea, I developed enterprise-grade RAG systems on AWS Bedrock, designed ontology-driven retrieval architectures for insurance knowledge using Palantir Ontology, and built evaluation pipelines to improve the accuracy and reliability of AI applications.',
   'Previously, I worked as a Software Engineer at Vitality, one of the UK’s leading health and life insurers, where I gained experience building scalable software solutions in a regulated industry.',
-  'I’m currently completing my BSc in Software Engineering at Bournemouth University (graduating June 2027) and am seeking opportunities to build impactful AI-powered software that bridges cutting-edge research with practical business applications.',
+  'I’m currently completing my BSc in Software Engineering at Bournemouth University (graduating June 2027) and am seeking Software Engineer or AI Engineer opportunities to build impactful software — AI-powered and otherwise — that bridges cutting-edge research with practical business applications.',
 ]
 
 const summaryHighlights = ['Bespin Global', 'AWS Bedrock', 'Palantir Ontology', 'Vitality', 'Bournemouth University']
@@ -98,8 +98,8 @@ const experience: ExperienceItem[] = [
     period: '2026.06 — 2026.07',
     logo: '/logos/bespin.webp',
     bullets: [
-      'Architected and built a vector-RAG system over enterprise insurance documents on AWS Bedrock, engineering the pipeline so a lightweight open-weight model (Qwen 3.5-35B-A3B) held 94% answer accuracy — within a point of the Sonnet 4.6 baseline, while replacing a $250/day pay-per-call API bill with self-hosted, fixed-cost GPU inference.',
-      'Identified where pure vector similarity fell short — multi-hop, relationship-dependent questions the VectorDB kept missing — and began designing a Palantir Ontology knowledge layer to encode insurance domain objects and their schema-defined relationships explicitly, aiming to let retrieval traverse defined links rather than rely on embedding distance alone.',
+      'Architected and built a vector-RAG system over enterprise insurance documents on AWS Bedrock, engineering the pipeline so a lightweight open-weight model (Qwen3.5-35B-A3B) held 94% answer accuracy — within a point of the Sonnet 4.6 baseline, while replacing a $250/day pay-per-call API bill with self-hosted, fixed-cost GPU inference.',
+      'Diagnosed where pure vector similarity fell short — multi-hop, relationship-dependent questions the VectorDB kept missing — and proposed a Palantir Ontology knowledge layer to encode insurance domain objects and their schema-defined relationships explicitly, aiming to let retrieval traverse defined links rather than rely on embedding distance alone.',
       'Built an LLM-based customer-question classification pipeline (Claude Haiku on Bedrock) across 21 business domains, reaching 93.24% accuracy through evaluation-driven prompt design and a two-stage guideline-generation architecture.',
       'Owned evaluation and cost analysis for GenAI services — golden-set accuracy tracking, RAGAS metrics, and region/latency/cost trade-off decisions for Bedrock deployments.',
     ],
@@ -111,10 +111,10 @@ const experience: ExperienceItem[] = [
     period: '2024.09 — 2026.03',
     logo: '/logos/army.webp',
     bullets: [
-      'Mandatory military service — led a squad of 8+ personnel coordinating technical operations to keep tactical systems at high availability.',
-      'Managed and optimised tactical network infrastructure, proactively troubleshooting hardware and signal issues to ensure 24/7 connectivity.',
+      'Mandatory military service — led a squad of 8+ personnel managing tactical communication infrastructure and resolving hardware and signal issues.',
+      'Earned a Company Commander’s Commendation for excellence in communications and leadership during a large-scale field exercise at the Korea Combat Training Center (KCTC).',
     ],
-    tags: ['Leadership', 'Network Operations', 'Mandatory Service'],
+    tags: ['Leadership', 'Tactical Communications', 'Mandatory Service'],
   },
   {
     role: 'Associate Software Engineer (Industrial Placement)',
@@ -123,9 +123,8 @@ const experience: ExperienceItem[] = [
     logo: '/logos/vitality.webp',
     logoFill: true,
     bullets: [
-      'Developed and maintained production backend services in a GraphQL engineering team — GraphQL, NestJS, TypeScript, and Node.js — at one of the UK’s largest health & life insurers.',
-      'Built and optimised an internal testing tool with React, JavaScript, and Sitecore, significantly improving development and testing workflows.',
-      'Delivered iteratively in a Scaled Agile Framework (SAFe) environment, and proactively moved teams to broaden expertise across engineering stacks.',
+      'Contributed to a proof-of-concept migrating REST APIs to GraphQL, then delivered and maintained the resulting production backend services (NestJS, TypeScript, Node.js) at one of the UK’s largest health & life insurers, within a Scaled Agile Framework (SAFe) team.',
+      'Built and optimised an internal React-based API testing tool that automated endpoint extraction from OpenAPI specifications, adopted by multiple engineering teams beyond the original team.',
     ],
     tags: ['GraphQL', 'NestJS', 'TypeScript', 'Node.js', 'React', 'SAFe'],
   },
@@ -156,7 +155,7 @@ const featuredProjects: FeaturedProject[] = [
       { value: '$250/day→$0', label: 'Sonnet API cost avoided' },
     ],
     description:
-      'Insurance domain-specific Q&A RAG system, designed and built end-to-end for a global insurer’s policy documents — a FastAPI backend with a React front end. Accuracy measured against a golden set built by insurance domain experts. Started from a 95% accuracy baseline on AWS Bedrock’s Sonnet 4.6, then, to optimise cost, moved to a lightweight SLM (Qwen 3.5-35B-A3B) and pushed answer accuracy back to 94% in three weeks — replacing a $250/day pay-per-call API bill with self-hosted, fixed-cost GPU inference.',
+      'Insurance domain-specific Q&A RAG system, designed and built end-to-end for a global insurer’s policy documents — a FastAPI backend with a React front end. Accuracy measured against a golden set built by insurance domain experts. Started from a 95% accuracy baseline on AWS Bedrock’s Sonnet 4.6, then, to optimise cost, moved to a lightweight SLM (Qwen3.5-35B-A3B) and pushed answer accuracy back to 94% in three weeks — replacing a $250/day pay-per-call API bill with self-hosted, fixed-cost GPU inference.',
     stages: [
       {
         label: 'Ingest',
@@ -258,7 +257,7 @@ const featuredProjects: FeaturedProject[] = [
       {
         label: 'Generate',
         title: 'SLM answer synthesis',
-        desc: 'Qwen 3.5-35B-A3B answers at 94% — within a point of the Sonnet 4.6 baseline, at a fraction of the cost. A strict JSON schema and citation grounding force every answer to cite its source chunk.',
+        desc: 'Qwen3.5-35B-A3B answers at 94% — within a point of the Sonnet 4.6 baseline, at a fraction of the cost. A strict JSON schema and citation grounding force every answer to cite its source chunk.',
         insightSteps: [
           {
             label: 'The chatbot',
@@ -276,7 +275,7 @@ const featuredProjects: FeaturedProject[] = [
         image: '/projects/chatbot-stage.png',
         imageLabel: 'RAG chatbot · live pipeline',
         imageCaption: 'End-to-end chat over the indexed insurance documents — Top K, memory, and multi-hop all adjustable, every answer citation-grounded.',
-        tags: ['Qwen 3.5-35B-A3B', 'JSON schema', 'Citations', 'Multi-hop'],
+        tags: ['Qwen3.5-35B-A3B', 'JSON schema', 'Citations', 'Multi-hop'],
       },
     ],
     tags: ['Python', 'FastAPI', 'React', 'AWS Bedrock', 'LangChain', 'Weaviate', 'ChromaDB', 'Prompt Engineering', 'RAGAS'],
@@ -473,9 +472,9 @@ function App() {
         <SummarySection
           paragraphs={summary}
           highlights={summaryHighlights}
-          name="Chanyeong Yun"
-          role="AI Software Engineer"
-          photo={{ src: '/photos/bespin-summary.webp', alt: 'Chanyeong Yun at Bespin Global' }}
+          name="Chanyeong (Edward) Yun"
+          role="Software Engineer"
+          photo={{ src: '/photos/bespin-summary.webp', alt: 'Chanyeong (Edward) Yun at Bespin Global' }}
           facts={summaryFacts}
         />
         <FeaturedProjectsSection projects={featuredProjects} />
@@ -484,7 +483,7 @@ function App() {
         <CertsSection certs={certs} />
         <WritingSection articles={articles} />
         <MomentsSection moments={moments} />
-        <SiteFooter data={{ name: 'Chanyeong Yun', email: EMAIL, linkedin: LINKEDIN_URL, github: GITHUB_URL }} />
+        <SiteFooter data={{ name: 'Chanyeong (Edward) Yun', email: EMAIL, linkedin: LINKEDIN_URL, github: GITHUB_URL }} />
       </div>
     </>
   )

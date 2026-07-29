@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 /writing-drafts
+
+# Personal / local files
+resume/
+.claude/
