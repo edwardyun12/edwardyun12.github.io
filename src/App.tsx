@@ -78,12 +78,12 @@ const portfolioData: PortfolioPageProps = {
 }
 
 const summary: string[] = [
-  'At Bespin Global, a leading cloud and AI consultancy and AWS Premier Tier Services Partner in South Korea, I developed enterprise-grade RAG systems on AWS Bedrock, designed ontology-driven retrieval architectures for insurance knowledge using Palantir Ontology, and built evaluation pipelines to improve the accuracy and reliability of AI applications.',
+  'At Bespin Global, a leading cloud and AI consultancy and AWS Premier Tier Services Partner in South Korea, I developed enterprise-grade RAG systems on AWS Bedrock, designed ontology-driven retrieval architectures for insurance knowledge modeled on Palantir’s Ontology framework, and built evaluation pipelines to improve the accuracy and reliability of AI applications.',
   'Previously, I worked as a Software Engineer at Vitality, one of the UK’s leading health and life insurers, where I gained experience building scalable software solutions in a regulated industry.',
   'I’m currently completing my BSc in Software Engineering at Bournemouth University (graduating June 2027) and am seeking Software Engineer or AI Engineer opportunities to build impactful software — AI-powered and otherwise — that bridges cutting-edge research with practical business applications.',
 ]
 
-const summaryHighlights = ['Bespin Global', 'AWS Bedrock', 'Palantir Ontology', 'Vitality', 'Bournemouth University']
+const summaryHighlights = ['Bespin Global', 'AWS Bedrock', 'Palantir’s Ontology framework', 'Vitality', 'Bournemouth University']
 
 const summaryFacts = [
   { title: 'Based in', value: 'Bournemouth, UK' },
@@ -99,11 +99,11 @@ const experience: ExperienceItem[] = [
     logo: '/logos/bespin.webp',
     bullets: [
       'Architected and built a vector-RAG system over enterprise insurance documents on AWS Bedrock, engineering the pipeline so a lightweight open-weight model (Qwen3.5-35B-A3B) held 94% answer accuracy — within a point of the Sonnet 4.6 baseline, while replacing a $250/day pay-per-call API bill with self-hosted, fixed-cost GPU inference.',
-      'Diagnosed where pure vector similarity fell short — multi-hop, relationship-dependent questions the VectorDB kept missing — and proposed a Palantir Ontology knowledge layer to encode insurance domain objects and their schema-defined relationships explicitly, aiming to let retrieval traverse defined links rather than rely on embedding distance alone.',
+      'Diagnosed where pure vector similarity fell short — multi-hop, relationship-dependent questions the VectorDB kept missing — and proposed an ontology-based knowledge layer, modeled on Palantir’s Ontology framework, to encode insurance domain objects and their schema-defined relationships explicitly, aiming to let retrieval traverse defined links rather than rely on embedding distance alone.',
       'Built an LLM-based customer-question classification pipeline (Claude Haiku on Bedrock) across 21 business domains, reaching 93.24% accuracy through evaluation-driven prompt design and a two-stage guideline-generation architecture.',
       'Owned evaluation and cost analysis for GenAI services — golden-set accuracy tracking, RAGAS metrics, and region/latency/cost trade-off decisions for Bedrock deployments.',
     ],
-    tags: ['Python', 'RAG', 'LLM Evaluation', 'Prompt Engineering', 'AWS Bedrock', 'Vector Search', 'Palantir Ontology'],
+    tags: ['Python', 'RAG', 'LLM Evaluation', 'Prompt Engineering', 'AWS Bedrock', 'Vector Search', 'Ontology Modeling'],
   },
   {
     role: 'Tactical Systems & Communications Squad Leader, Sergeant',
@@ -174,7 +174,7 @@ const featuredProjects: FeaturedProject[] = [
           },
           {
             label: 'What it showed',
-            text: 'Docling captured layout and tables most accurately, but was too slow across the corpus — roughly 100 policy documents averaging 200+ pages each.',
+            text: 'Docling captured layout and tables most accurately, but was too slow across the corpus — the average policy document ran 200+ pages.',
           },
           {
             label: 'The trade-off',
@@ -211,7 +211,7 @@ const featuredProjects: FeaturedProject[] = [
       {
         label: 'Index',
         title: 'Embed & store',
-        desc: 'AWS Bedrock’s Titan Embeddings v2 embeds each parsed chunk, written into both Weaviate and ChromaDB — Weaviate chosen for its built-in BM25 + dense vector hybrid search, giving keyword and semantic retrieval out of the box. 17,523 chunks indexed across procedures, sections, and table-level splits.',
+        desc: 'AWS Bedrock’s Titan Embeddings v2 embeds each parsed chunk, written into both Weaviate and ChromaDB — Weaviate chosen for its built-in BM25 + dense vector hybrid search, giving keyword and semantic retrieval out of the box. Chunks indexed across procedures, sections, and table-level splits.',
         insightSteps: [
           {
             label: 'The visualiser',
@@ -219,7 +219,7 @@ const featuredProjects: FeaturedProject[] = [
           },
           {
             label: 'What it showed',
-            text: 'Confirmed the previous stage’s chunks were actually landing correctly in the VectorDB — table_row chunks (15,098 of 17,523) formed their own tight cluster, separate from procedure, section, and table_block chunks, instead of one blurred mass.',
+            text: 'Confirmed the previous stage’s chunks were actually landing correctly in the VectorDB — table_row chunks, the clear majority of the corpus, formed their own tight cluster, separate from procedure, section, and table_block chunks, instead of one blurred mass.',
           },
           {
             label: 'Why it mattered',
@@ -228,7 +228,7 @@ const featuredProjects: FeaturedProject[] = [
         ],
         image: '/projects/embedding-stage.png',
         imageLabel: 'embedding explorer · live Weaviate',
-        imageCaption: '17,523 vectors from the live Weaviate collection, projected to 2D with PCA — searchable in real time against the actual VectorDB.',
+        imageCaption: 'Vectors from the live Weaviate collection, projected to 2D with PCA — searchable in real time against the actual VectorDB.',
         tags: ['Titan v2', 'Weaviate', 'ChromaDB', 'PCA Projection'],
       },
       {
@@ -292,7 +292,7 @@ const featuredProjects: FeaturedProject[] = [
       { value: '21', label: 'business domains' },
     ],
     description:
-      'LLM-based classification system for a large insurance provider’s customer questions. Prompts run against Claude Haiku on AWS Bedrock were tested and iterated against a 695-question golden set with verified domain answers until predictions matched 93.24% of the time (Macro F1 0.9432) — the resulting pipeline is what classifies incoming customer questions going forward, with 14 of 21 domains hitting 100%.',
+      'LLM-based classification system for a large insurance provider’s customer questions. Prompts run against Claude Haiku on AWS Bedrock were tested and iterated against a golden set of verified domain answers until predictions matched 93.24% of the time (Macro F1 0.9432) — the resulting pipeline is what classifies incoming customer questions going forward, with 14 of 21 domains hitting 100%.',
     highlights: [
       'Two-stage architecture: an LLM first mines labelled examples to auto-generate per-domain classification guidelines (an "ontologist" persona prompt), then a second pass classifies new questions in parallel batches against those guidelines.',
       'A hard-boundary rule matrix injected ahead of the model’s own judgement to eliminate recurring confusions between frequently-mixed domains.',
