@@ -137,7 +137,7 @@ const education: ExperienceItem[] = [
     period: '2021.09 — 2027.06 (expected graduation)',
     bullets: [
       'On track for First Class Honours (GPA 4.5) on a sandwich-degree programme combining academic study with a year in industry.',
-      'Elected Student Representative for 100+ Software Engineering peers — coursework spanning systems design, full-stack development, and machine learning.',
+      'Elected Student Representative for 100+ Software Engineering peers — coursework spanning systems design, full-stack development, application programming, and machine learning.',
     ],
     tags: ['First Class Honours', 'Student Representative', 'Year in Industry'],
   },
