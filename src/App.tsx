@@ -47,7 +47,7 @@ const portfolioData: PortfolioPageProps = {
     titleLine1: 'Software Engineer,',
     titleLine2Gradient: 'building backend systems & AI',
     subtitle: 'I build reliable software, from production backend systems to AI pipelines, that solves real-world problems.',
-    tags: ['Python', 'TypeScript', 'AWS Bedrock', 'RAG'],
+    tags: ['Python', 'TypeScript', 'System Design', 'RAG'],
     image: {
       src: '/photos/aws.webp',
       alt: 'Chanyeong at AWS Student Community Day, Seoul',
