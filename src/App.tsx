@@ -16,7 +16,7 @@ import {
   type Article,
   type Moment,
 } from '@/components/sections'
-import { Database, Layers, Mic, ScanSearch, Trophy } from 'lucide-react'
+import { Database, Layers, Mic, Trophy } from 'lucide-react'
 
 const GITHUB_URL = 'https://github.com/edwardyun12'
 const LINKEDIN_URL = 'https://uk.linkedin.com/in/chanyeongyun'
@@ -46,7 +46,7 @@ const portfolioData: PortfolioPageProps = {
     badge: 'Open to AI & Software Engineer roles',
     titleLine1: 'Software Engineer,',
     titleLine2Gradient: 'building backend systems & AI',
-    subtitle: 'I build reliable software — from production backend systems to AI pipelines — that solves real-world problems.',
+    subtitle: 'I build reliable software, from production backend systems to AI pipelines, that solves real-world problems.',
     tags: ['Python', 'TypeScript', 'AWS Bedrock', 'RAG'],
     image: {
       src: '/photos/aws.webp',
@@ -303,7 +303,7 @@ const featuredProjects: FeaturedProject[] = [
   {
     title: 'Nexus — a voice-first AI agent that runs my job hunt',
     navTitle: 'Nexus — voice AI agent',
-    meta: 'Personal project · 2026',
+    meta: 'Personal project · Jul 2026',
     icon: <Mic strokeWidth={1.25} />,
     image: '/projects/nexus.png',
     stats: [
@@ -320,19 +320,9 @@ const featuredProjects: FeaturedProject[] = [
       'Security sized to the threat model: per-IP and global-daily rate limits, capped request bodies, upstream errors never relayed verbatim, timing-safe access-key comparison.',
       'Voice as a first-class input — wake-word listening, speech recognition, and text-to-speech via the Web Speech API, with the mic cut the instant Nexus starts speaking.',
     ],
-    tags: ['React', 'TypeScript', 'MCP', 'Node.js', 'Express', 'Notion API', 'Web Speech API'],
+    tags: ['React', 'TypeScript', 'MCP', 'Groq', 'Llama 3.3 70B', 'Node.js', 'Express', 'Notion API', 'Web Speech API'],
     repoUrl: 'https://github.com/edwardyun12/nexus-ai',
     demoUrl: 'https://nexus-ai-zkmf.onrender.com',
-  },
-  {
-    title: 'HireReady AI — LLM-powered CV analysis',
-    navTitle: 'HireReady AI',
-    meta: 'Personal project · 2025 — Present',
-    icon: <ScanSearch strokeWidth={1.25} />,
-    description:
-      'Full-stack platform that analyses CVs in real time and recommends skill optimisations to improve job-application success. React front end over an asynchronous FastAPI backend, with LLMs performing deep semantic analysis to surface critical skill gaps and data-driven recommendations.',
-    tags: ['React', 'FastAPI', 'Python', 'LLM'],
-    repoUrl: 'https://github.com/edwardyun12/cv-job-matcher',
   },
   {
     title: 'JPMorgan Chase’s Computing in Business Week',
@@ -352,7 +342,7 @@ const featuredProjects: FeaturedProject[] = [
 const skillGroups: SkillGroup[] = [
   {
     title: 'Languages & Frameworks',
-    items: ['Python', 'TypeScript', 'JavaScript', 'Java', 'Kotlin', 'SQL', 'React', 'FastAPI', 'NestJS'],
+    items: ['Python', 'TypeScript', 'JavaScript', 'Java', 'Kotlin', 'SQL', 'React', 'FastAPI', 'NestJS', 'GraphQL'],
   },
   {
     title: 'GenAI / LLM',
