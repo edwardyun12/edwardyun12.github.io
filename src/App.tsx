@@ -47,7 +47,7 @@ const portfolioData: PortfolioPageProps = {
     titleLine1: 'Software Engineer,',
     titleLine2Gradient: 'building backend systems & AI',
     subtitle: 'I build reliable software — from production backend systems to AI pipelines — that solves real-world problems.',
-    tags: ['TypeScript', 'GraphQL', 'AWS Bedrock', 'RAG'],
+    tags: ['Python', 'TypeScript', 'AWS Bedrock', 'RAG'],
     image: {
       src: '/photos/aws.webp',
       alt: 'Chanyeong at AWS Student Community Day, Seoul',
@@ -352,7 +352,7 @@ const featuredProjects: FeaturedProject[] = [
 const skillGroups: SkillGroup[] = [
   {
     title: 'Languages & Frameworks',
-    items: ['Python', 'TypeScript', 'JavaScript', 'Java', 'Kotlin', 'SQL', 'React', 'FastAPI', 'NestJS', 'GraphQL'],
+    items: ['Python', 'TypeScript', 'JavaScript', 'Java', 'Kotlin', 'SQL', 'React', 'FastAPI', 'NestJS'],
   },
   {
     title: 'GenAI / LLM',
