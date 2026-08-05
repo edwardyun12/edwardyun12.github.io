@@ -1,32 +1,38 @@
-# React + TypeScript + Vite
+# edwardyun12.github.io
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+My personal portfolio site — built as a real product, not a template: a full case-study of the RAG system I built at Bespin Global (interactive pipeline explorer, live-tuned retrieval demos), experience, skills, and writing.
 
-Currently, two official plugins are available:
+**Live: [edwardyun12.github.io](https://edwardyun12.github.io/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+![Homepage screenshot](.github/assets/screenshot.jpg)
 
-## React Compiler
+## Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 19 + TypeScript**, built with **Vite**
+- **Tailwind CSS v4** for styling
+- **Three.js** for the animated hero background
+- **oxlint** for linting
+- Deployed to **GitHub Pages** via **GitHub Actions** on every push to `main`
 
-## Expanding the Oxlint configuration
+## Structure
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```
+src/
+  App.tsx                    # page composition — wires data into sections
+  types/portfolio.ts         # shared content types (ExperienceItem, FeaturedProject, ...)
+  data/                      # site content — profile, experience, projects, skills, certs, articles, moments
+  components/
+    ui/starfall-portfolio-landing.tsx   # hero + animated background
+    sections/                # one file per page section (Summary, Experience, Projects, ...)
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Content lives entirely in `src/data/*` as typed data, separate from the section components in `src/components/sections/*` that render it — updating a job, project, or skill means editing a data file, not the layout.
+
+## Development
+
+```bash
+npm install
+npm run dev      # local dev server
+npm run build    # typecheck + production build
+npm run lint      # oxlint
+```
